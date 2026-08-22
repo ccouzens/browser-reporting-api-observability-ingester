@@ -28,7 +28,7 @@ For configuration specific to your website fork the project.
 Default configuration
 
 ```
-METRICS_LABELS=ua_is_app,ua_is_mobile,url_origin
+METRICS_LABELS=ua_is_app,ua_is_mobile,document_url_origin
 LOG_LABELS=url,ip_addr,ua
 IP_ADDR_FROM=socket
 INGESTOR_URL_ORIGIN=http
@@ -74,10 +74,19 @@ in the structured JSON logs.
 Options here are a matrix of urls, and url properties. Several different URLs
 are available
 
-1. `reportingUrl`: the url of the endpoint that this service is hosted on, and
+1. `reporting_url`: the url of the endpoint that this service is hosted on, and
    the client connects from.
-2. `documentUrl`: the url of the document that the report was generated from.
-3. `sourceFileUrl`: the url of the file that caused the infringement.
+2. `document_url`: the url of the document that the report was generated from.
+3. `source_file_url`: the url of the file that caused the infringement.
+
+The following
+[properties of the URL object](https://developer.mozilla.org/en-US/docs/Web/API/URL)
+are supported: `hostname`, `href`, `origin`, `pathname` and `search`.
+
+For example:
 
 `reporting_url_origin`: the protocol and host and port (if non standard) used by
 the client to connect to the reporting endpoint
+
+`document_url_href`: the whole of the url of the document content that the
+browser was on when the report was generated.
