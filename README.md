@@ -34,7 +34,47 @@ IP_ADDR_FROM=socket
 INGESTOR_URL_ORIGIN=http
 ```
 
-`IP_ADDR_FROM` can be used to determine how the client IP address is derived.
+```json
+{
+  "ipAddrFrom": "socket",
+  "ingestorURLOrigin": "http",
+  "metricsPort": 8081,
+  "publicPorts": [8080],
+  "vhosts": [
+    {
+      "reportUrlPattern": { "pathname": "/report/" },
+      "logging": {
+        "tag": null,
+        "fields": {
+          "report": {
+            "type": true
+          },
+          "document": {
+            "url": {
+              "href": true
+            }
+          },
+          "sourceFile": {
+            "url": {
+              "href": true
+            }
+          },
+          "client": {
+            "ipAddr": {
+              "string": true
+            },
+            "userAgent": {
+              "string": true
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+`ipAddrFrom` can be used to determine how the client IP address is derived.
 `socket` takes directly from the connection- use this if clients connect
 directly to the ingestor. `x-forwarded-for` uses the
 [x-forwarded-for header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Forwarded-For).
