@@ -1,12 +1,15 @@
-format: format-biome format-prettier format-just
+format: format-biome format-just format-prettier format-superhtml
 
 format-biome:
     biome check --write
 
+format-just:
+    just --fmt
+
 format-prettier:
     prettier --write '**/*.md'
 
-format-just:
+format-superhtml:
     just --fmt
 
 [working-directory('projects/site-with-violations')]
