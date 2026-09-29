@@ -11,7 +11,7 @@
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
-		"includes": ["!projects/site-with-violations/*.html"]
+		"includes": ["**", "!**/*.html"]
 	},
 	"linter": {
 		"enabled": true,
