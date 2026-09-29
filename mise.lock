@@ -50,11 +50,11 @@ url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/581813250"
 provenance = "github-attestations"
 
 [[tools.superhtml]]
-version = "0.7.0"
+version = "0.6.2"
 backend = "github:kristoff-it/superhtml"
-specifiers = ["latest"]
+specifiers = ["0.6.2"]
 
 [tools.superhtml."platforms.macos-arm64"]
-checksum = "sha256:3846e475290f917dbf5cde8f35faff85c4402279f6ad8a8f95a861bc6523a154"
-url = "https://github.com/kristoff-it/superhtml/releases/download/v0.7.0/aarch64-macos.zip"
-url_api = "https://api.github.com/repos/kristoff-it/superhtml/releases/assets/442843867"
+checksum = "sha256:817b97fd8a7bc2a7b664adce45a3b6e54f2d9a8f6d5628b184f988ece3f2b55d"
+url = "https://github.com/kristoff-it/superhtml/releases/download/v0.6.2/aarch64-macos.zip"
+url_api = "https://api.github.com/repos/kristoff-it/superhtml/releases/assets/303689388"

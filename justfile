@@ -10,7 +10,7 @@ format-prettier:
     prettier --write '**/*.md'
 
 format-superhtml:
-    just --fmt
+    superhtml fmt projects/site-with-violations/*.html
 
 [working-directory('projects/site-with-violations')]
 site-with-violations-dependencies:
@@ -23,4 +23,4 @@ site-with-violations-build: site-with-violations-dependencies
 
 [working-directory('./projects/site-with-violations')]
 site-with-violations: site-with-violations-build
-    pnpm preview 
+    pnpm preview
