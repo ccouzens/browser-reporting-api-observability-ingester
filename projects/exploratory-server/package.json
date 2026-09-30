@@ -4,7 +4,8 @@
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
-		"preview": "node src/main.ts"
+		"preview": "node src/main.ts",
+		"typecheck": "tsc"
 	},
 	"devDependencies": {
 		"typescript": "~6.0.2"
