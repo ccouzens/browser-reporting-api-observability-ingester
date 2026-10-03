@@ -7,6 +7,12 @@ version = "2.5.14"
 backend = "aqua:biomejs/biome"
 specifiers = ["latest"]
 
+[tools.biome."platforms.linux-x64"]
+checksum = "sha256:290c1c85deeaf01310d9187306060b53961574856a7e34f59d9662562e6f19fe"
+url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.5.14/biome-linux-x64"
+url_api = "https://api.github.com/repos/biomejs/biome/releases/assets/567471264"
+provenance = "github-attestations"
+
 [tools.biome."platforms.macos-arm64"]
 checksum = "sha256:3d1194d0a7b720315fb6f8cbafeb5b18ca7100c3e635e8ce82ef46b315de9c0e"
 url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.5.14/biome-darwin-arm64"
@@ -18,6 +24,11 @@ version = "1.58.0"
 backend = "aqua:casey/just"
 specifiers = ["latest"]
 
+[tools.just."platforms.linux-x64"]
+checksum = "sha256:4a5cc2f53e6f0f8c59092a6cc38291eb729d46a7dd95d3ae582008881b84931d"
+url = "https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/casey/just/releases/assets/500509978"
+
 [tools.just."platforms.macos-arm64"]
 checksum = "sha256:50ae3e996c974a0bf32ea7d10f495070df33f1b43e0616b2769e3d4821ed8f48"
 url = "https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-aarch64-apple-darwin.tar.gz"
@@ -27,6 +38,10 @@ url_api = "https://api.github.com/repos/casey/just/releases/assets/500509965"
 version = "26.10.0"
 backend = "core:node"
 specifiers = ["latest"]
+
+[tools.node."platforms.linux-x64"]
+checksum = "sha256:cb5c9ce9c80d7b8821e3a258543c71b939138cf17c74d5cc44bbe85d6dbc5ad8"
+url = "https://nodejs.org/dist/v26.10.0/node-v26.10.0-linux-x64.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
 checksum = "sha256:751fdf7439f115d87ee2a8f3f18c065b6151852068e3e666ac60ac2996f75ac9"
@@ -43,6 +58,12 @@ version = "12.6.0"
 backend = "aqua:pnpm/pnpm"
 specifiers = ["latest"]
 
+[tools.pnpm."platforms.linux-x64"]
+checksum = "sha256:3f4c66f668d0e84219679982d095b30da68325e1fac9284e7f5dc1584bd3d13e"
+url = "https://github.com/pnpm/pnpm/releases/download/v12.6.0/pnpm-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/581813243"
+provenance = "github-attestations"
+
 [tools.pnpm."platforms.macos-arm64"]
 checksum = "sha256:1030f38e14fa2e6c87fe6ab0313a3bf3b794a961504f4439bad2ca2110d3583e"
 url = "https://github.com/pnpm/pnpm/releases/download/v12.6.0/pnpm-darwin-arm64.tar.gz"
@@ -53,6 +74,11 @@ provenance = "github-attestations"
 version = "0.6.2"
 backend = "github:kristoff-it/superhtml"
 specifiers = ["0.6.2"]
+
+[tools.superhtml."platforms.linux-x64"]
+checksum = "sha256:e6dd0bd6223d6fb925843800086ece2fb11d8973e08a2d9ccc7a76ce7d0a36e3"
+url = "https://github.com/kristoff-it/superhtml/releases/download/v0.6.2/x86_64-linux-musl.tar.xz"
+url_api = "https://api.github.com/repos/kristoff-it/superhtml/releases/assets/303689393"
 
 [tools.superhtml."platforms.macos-arm64"]
 checksum = "sha256:817b97fd8a7bc2a7b664adce45a3b6e54f2d9a8f6d5628b184f988ece3f2b55d"
