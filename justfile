@@ -1,5 +1,7 @@
+[parallel]
 format: format-biome format-just format-prettier format-superhtml
 
+[parallel]
 typecheck: site-with-violations-typecheck exploratory-server-typecheck
 
 format-biome:

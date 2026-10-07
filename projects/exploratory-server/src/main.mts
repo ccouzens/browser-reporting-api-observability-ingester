@@ -1,6 +1,16 @@
 import * as http from "node:http";
+import { json } from "node:stream/consumers";
 
-const server = http.createServer(async (req, res) => {}).listen(4174);
+const server = http
+	.createServer(async (req, res) => {
+		const { pathname, searchParams } = new URL(`http://t${req.url}`);
+		const method = req.method;
+		const body = await json(req).catch(() => null);
+		console.log({ pathname, searchParams, method, body });
+		res.statusCode = 200;
+		res.end();
+	})
+	.listen(4174);
 
 server.addListener("listening", () => {
 	const address = server.address();
