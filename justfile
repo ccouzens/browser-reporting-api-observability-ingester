@@ -16,6 +16,9 @@ format-prettier:
 format-superhtml:
     superhtml fmt projects/site-with-violations/*.html
 
+[parallel]
+site-with-violations-and-exploratory-server: site-with-violations exploratory-server
+
 [working-directory('projects/site-with-violations')]
 site-with-violations-dependencies:
     pwd

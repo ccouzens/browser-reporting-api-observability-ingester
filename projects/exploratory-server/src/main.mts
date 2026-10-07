@@ -4,9 +4,9 @@ import { json } from "node:stream/consumers";
 const server = http
 	.createServer(async (req, res) => {
 		const { pathname, searchParams } = new URL(`http://t${req.url}`);
-		const method = req.method;
+		const { method, headersDistinct } = req;
 		const body = await json(req).catch(() => null);
-		console.log({ pathname, searchParams, method, body });
+		console.log({ pathname, searchParams, method, body, headersDistinct });
 		res.statusCode = 200;
 		res.end();
 	})

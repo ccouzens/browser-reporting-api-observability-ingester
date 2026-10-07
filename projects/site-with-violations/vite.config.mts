@@ -7,4 +7,9 @@ export default defineConfig({
 		minify: false,
 		cssMinify: false,
 	},
+	server: {
+		headers: {
+			"Reporting-Endpoints": 'default="http://localhost:4174/reports"',
+		},
+	},
 });
