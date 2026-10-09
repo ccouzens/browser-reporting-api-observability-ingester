@@ -1,13 +1,28 @@
 import * as http from "node:http";
 import { json } from "node:stream/consumers";
+import * as util from "node:util";
 
 const server = http
 	.createServer(async (req, res) => {
 		const { pathname, searchParams } = new URL(`http://t${req.url}`);
 		const { method, headersDistinct } = req;
 		const body = await json(req).catch(() => null);
-		console.log({ pathname, searchParams, method, body, headersDistinct });
-		res.statusCode = 200;
+		console.log(
+			util.inspect(
+				{ pathname, searchParams, method, body, headersDistinct },
+				false,
+				10,
+				true,
+			),
+		);
+		res.setHeaders(
+			new Map([
+				["Access-Control-Allow-Origin", "http://localhost:4173"],
+				["Access-Control-Allow-Methods", "POST"],
+				["Access-Control-Allow-Headers", "Content-Type"],
+			]),
+		);
+		res.statusCode = 204;
 		res.end();
 	})
 	.listen(4174);
