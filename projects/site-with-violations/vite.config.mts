@@ -7,6 +7,9 @@ export default defineConfig({
 		minify: false,
 		cssMinify: false,
 	},
+	preview: {
+		allowedHosts: true,
+	},
 	server: {
 		headers: {
 			"content-security-policy": "img-src 'self'; report-to default",

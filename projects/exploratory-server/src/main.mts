@@ -17,7 +17,7 @@ const server = http
 		);
 		res.setHeaders(
 			new Map([
-				["Access-Control-Allow-Origin", "http://localhost:4173"],
+				["Access-Control-Allow-Origin", "*"],
 				["Access-Control-Allow-Methods", "POST"],
 				["Access-Control-Allow-Headers", "Content-Type"],
 			]),
