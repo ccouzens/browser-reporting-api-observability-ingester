@@ -10,7 +10,10 @@ export default defineConfig({
 	server: {
 		headers: {
 			"content-security-policy": "img-src 'self'; report-to default",
-			"Reporting-Endpoints": 'default="http://localhost:4174/reports"',
+			"Reporting-Endpoints": 'default="/reports"',
+		},
+		proxy: {
+			"/reports": "http://localhost:4174",
 		},
 	},
 });
