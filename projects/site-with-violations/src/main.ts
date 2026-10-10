@@ -9,3 +9,6 @@ blobImage.src = URL.createObjectURL(new Blob([]));
 blobImage.alt = "broken pixel";
 
 document.body.appendChild(blobImage);
+
+// Generate a permissions policy report
+addEventListener("unload", (event) => { console.log("unload", event )})

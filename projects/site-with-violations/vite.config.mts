@@ -12,7 +12,8 @@ export default defineConfig({
 	},
 	server: {
 		headers: {
-			"content-security-policy": "img-src 'self'; report-to default",
+			"Content-Security-Policy": "img-src 'self'; report-to default",
+			"Permissions-Policy": "unload=<allowlist>; report-to default",
 			"Reporting-Endpoints": 'default="/reports"',
 		},
 		proxy: {

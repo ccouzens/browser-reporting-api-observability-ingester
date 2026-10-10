@@ -16,6 +16,9 @@ format-prettier:
 format-superhtml:
     superhtml fmt projects/site-with-violations/*.html
 
+https-server:
+    cloudflared tunnel --url http://localhost:4173
+
 [parallel]
 site-with-violations-and-exploratory-server: site-with-violations exploratory-server
 

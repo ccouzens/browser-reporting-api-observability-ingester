@@ -19,6 +19,21 @@ url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.5
 url_api = "https://api.github.com/repos/biomejs/biome/releases/assets/567471268"
 provenance = "github-attestations"
 
+[[tools.cloudflared]]
+version = "2026.10.0"
+backend = "aqua:cloudflare/cloudflared"
+specifiers = ["latest"]
+
+[tools.cloudflared."platforms.linux-x64"]
+checksum = "sha256:d33ff2d14475178d2012c2c56beba87389ac5ded27649519f198a7d3134a99db"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.10.0/cloudflared-linux-amd64"
+url_api = "https://api.github.com/repos/cloudflare/cloudflared/releases/assets/613255386"
+
+[tools.cloudflared."platforms.macos-arm64"]
+checksum = "sha256:a2f79ff7b9420aa537d74af239f376da170bbabeb529aec416002adac6a72e70"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.10.0/cloudflared-darwin-arm64.tgz"
+url_api = "https://api.github.com/repos/cloudflare/cloudflared/releases/assets/613254583"
+
 [[tools.just]]
 version = "1.58.0"
 backend = "aqua:casey/just"
