@@ -12,7 +12,10 @@ export default defineConfig({
 	},
 	server: {
 		headers: {
-			"Content-Security-Policy": "img-src 'self'; report-to default",
+			"Connection-Allowlist-Report-Only":
+				"(response-origin); report-to=default",
+			"Content-Security-Policy":
+				"img-src 'self' https://www.gstatic.com; report-to default",
 			"Permissions-Policy": "unload=<allowlist>; report-to default",
 			"Reporting-Endpoints": 'default="/reports"',
 		},
