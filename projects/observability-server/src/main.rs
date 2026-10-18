@@ -3,7 +3,7 @@ use axum::{
     http::StatusCode,
     routing::{get, post},
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(thiserror::Error, Debug)]
 pub enum TopLevelError {
@@ -37,7 +37,29 @@ async fn create_report(Json(payload): Json<Vec<CreateReport>>) -> (StatusCode, S
     (StatusCode::CREATED, "".to_string())
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(tag = "type", content = "body")]
+enum CreateReportBody {
+    /**
+    Content Security Policy
+
+    https://w3c.github.io/webappsec-csp/#reporting
+    */
+    #[serde(rename = "csp-violation")]
+    CspViolation {
+        /**
+        The result of executing Strip URL for use in reports on violation’s url.
+
+        https://w3c.github.io/webappsec-csp/#dom-cspviolationreportbody-documenturl
+        */
+        #[serde(rename = "documentURL")]
+        document_url: String,
+    },
+    #[serde(other)]
+    UnknownViolation,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 struct CreateReport {
     /**
     The number of milliseconds between report’s timestamp and the current time.
@@ -45,12 +67,6 @@ struct CreateReport {
     https://www.w3.org/TR/reporting-1/#serialize-reports
     */
     age: u32,
-    /**
-    A report type is a non-empty string that specifies the set of data that is contained in the body of a report.
-
-    https://www.w3.org/TR/reporting-1/#report-type
-    */
-    r#type: String,
     /**
     Each report has a url, which is typically the address of the Document or Worker from which the report was generated.
 
@@ -69,5 +85,6 @@ struct CreateReport {
 
     https://www.w3.org/TR/reporting-1/#report-body
     */
-    body: serde_json::Value,
+    #[serde(flatten)]
+    body: CreateReportBody,
 }
