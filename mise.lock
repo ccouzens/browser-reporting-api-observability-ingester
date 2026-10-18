@@ -85,6 +85,11 @@ url = "https://github.com/pnpm/pnpm/releases/download/v12.6.0/pnpm-darwin-arm64.
 url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/581813250"
 provenance = "github-attestations"
 
+[[tools.rust]]
+version = "stable"
+backend = "core:rust"
+specifiers = ["latest"]
+
 [[tools.superhtml]]
 version = "0.6.2"
 backend = "github:kristoff-it/superhtml"
