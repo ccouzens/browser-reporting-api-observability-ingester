@@ -1,5 +1,5 @@
 [parallel]
-format: format-biome format-just format-prettier format-superhtml
+format: format-biome format-just format-prettier format-superhtml observability-server-format
 
 [parallel]
 typecheck: site-with-violations-typecheck exploratory-server-typecheck
@@ -19,12 +19,22 @@ format-superhtml:
 https-server:
     cloudflared tunnel --url http://localhost:4173
 
+[working-directory('projects/observability-server')]
+observability-server-format:
+    cargo fmt
+
+[working-directory('projects/observability-server')]
+observability-server:
+    cargo run
+
 [parallel]
 site-with-violations-and-exploratory-server: site-with-violations exploratory-server
 
+[parallel]
+site-with-violations-and-observability-server: site-with-violations observability-server
+
 [working-directory('projects/site-with-violations')]
 site-with-violations-dependencies:
-    pwd
     pnpm i --frozen-lockfile
 
 [working-directory('./projects/site-with-violations')]

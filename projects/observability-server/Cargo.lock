@@ -328,6 +328,7 @@ dependencies = [
  "axum",
  "color-eyre",
  "serde",
+ "serde_json",
  "thiserror",
  "tokio",
 ]
