@@ -1,5 +1,5 @@
 [parallel]
-format: format-biome format-just format-prettier format-superhtml observability-server-format
+format: format-biome format-just format-superhtml observability-server-format
 
 [parallel]
 typecheck: site-with-violations-typecheck exploratory-server-typecheck
@@ -9,9 +9,6 @@ format-biome:
 
 format-just:
     just --fmt
-
-format-prettier:
-    prettier --write '**/*.md'
 
 format-superhtml:
     superhtml fmt projects/site-with-violations/*.html

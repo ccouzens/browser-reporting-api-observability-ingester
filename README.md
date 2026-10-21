@@ -36,41 +36,41 @@ INGESTOR_URL_ORIGIN=http
 
 ```json
 {
-  "ipAddrFrom": "socket",
-  "ingestorURLOrigin": "http",
-  "metricsPort": 8081,
-  "publicPorts": [8080],
-  "vhosts": [
-    {
-      "reportUrlPattern": { "pathname": "/report/" },
-      "logging": {
-        "tag": null,
-        "fields": {
-          "report": {
-            "type": true
-          },
-          "document": {
-            "url": {
-              "href": true
-            }
-          },
-          "sourceFile": {
-            "url": {
-              "href": true
-            }
-          },
-          "client": {
-            "ipAddr": {
-              "string": true
-            },
-            "userAgent": {
-              "string": true
-            }
-          }
-        }
-      }
-    }
-  ]
+	"ipAddrFrom": "socket",
+	"ingestorURLOrigin": "http",
+	"metricsPort": 8081,
+	"publicPorts": [8080],
+	"vhosts": [
+		{
+			"reportUrlPattern": { "pathname": "/report/" },
+			"logging": {
+				"tag": null,
+				"fields": {
+					"report": {
+						"type": true
+					},
+					"document": {
+						"url": {
+							"href": true
+						}
+					},
+					"sourceFile": {
+						"url": {
+							"href": true
+						}
+					},
+					"client": {
+						"ipAddr": {
+							"string": true
+						},
+						"userAgent": {
+							"string": true
+						}
+					}
+				}
+			}
+		}
+	]
 }
 ```
 
@@ -113,7 +113,6 @@ in the structured JSON logs.
 
 Options here are a matrix of urls, and url properties. Several different URLs
 are available
-
 1. `reporting_url`: the url of the endpoint that this service is hosted on, and
    the client connects from.
 2. `document_url`: the url of the document that the report was generated from.

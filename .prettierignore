@@ -1,4 +1,0 @@
-**/*.json
-projects/site-with-violations/*.html
-projects/site-with-violations/dist/
-projects/site-with-violations/node_modules/
