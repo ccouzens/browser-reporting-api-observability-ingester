@@ -7,6 +7,18 @@ version = "2.6.2"
 backend = "aqua:biomejs/biome"
 specifiers = ["latest"]
 
+[tools.biome."platforms.linux-arm64"]
+checksum = "sha256:08536c586089e603dae610f73adc3ab95c0a0fdb00c029662c09456c42ea3ac8"
+url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.6.2/biome-linux-arm64"
+url_api = "https://api.github.com/repos/biomejs/biome/releases/assets/662221738"
+provenance = "github-attestations"
+
+[tools.biome."platforms.linux-x64"]
+checksum = "sha256:43c08f3454d375d38c6441939acc8a557702bc8459272dd513f4f7474a4ed352"
+url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.6.2/biome-linux-x64"
+url_api = "https://api.github.com/repos/biomejs/biome/releases/assets/662221734"
+provenance = "github-attestations"
+
 [tools.biome."platforms.macos-arm64"]
 checksum = "sha256:be66b76dcb930b1e365bd36c4f5d8557c2dda70b31567f8bd15509e487753a69"
 url = "https://github.com/biomejs/biome/releases/download/%40biomejs/biome%402.6.2/biome-darwin-arm64"
@@ -14,47 +26,61 @@ url_api = "https://api.github.com/repos/biomejs/biome/releases/assets/662221730"
 provenance = "github-attestations"
 
 [[tools.cloudflared]]
-version = "2026.10.0"
+version = "2026.10.3"
 backend = "aqua:cloudflare/cloudflared"
 specifiers = ["latest"]
 
+[tools.cloudflared."platforms.linux-arm64"]
+checksum = "sha256:89297ebfb9e8c99c0dc013a1140601453cf3798d8306c5591651f4a3f5210be8"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.10.3/cloudflared-linux-arm64"
+url_api = "https://api.github.com/repos/cloudflare/cloudflared/releases/assets/662571615"
+
 [tools.cloudflared."platforms.linux-x64"]
-checksum = "sha256:d33ff2d14475178d2012c2c56beba87389ac5ded27649519f198a7d3134a99db"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.10.0/cloudflared-linux-amd64"
-url_api = "https://api.github.com/repos/cloudflare/cloudflared/releases/assets/613255386"
+checksum = "sha256:053b80b0a23031a038fdbf3c073f59f82b8f1f152aa67971d7383ffafc0dbab0"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.10.3/cloudflared-linux-amd64"
+url_api = "https://api.github.com/repos/cloudflare/cloudflared/releases/assets/662570969"
 
 [tools.cloudflared."platforms.macos-arm64"]
-checksum = "sha256:a2f79ff7b9420aa537d74af239f376da170bbabeb529aec416002adac6a72e70"
-url = "https://github.com/cloudflare/cloudflared/releases/download/2026.10.0/cloudflared-darwin-arm64.tgz"
-url_api = "https://api.github.com/repos/cloudflare/cloudflared/releases/assets/613254583"
+checksum = "sha256:1165d14b6f6360a3b8c283d7d1100024d6ec7cd9bc9e32519e96150645f3ec55"
+url = "https://github.com/cloudflare/cloudflared/releases/download/2026.10.3/cloudflared-darwin-arm64.tgz"
+url_api = "https://api.github.com/repos/cloudflare/cloudflared/releases/assets/662573250"
 
 [[tools.just]]
-version = "1.58.0"
+version = "1.59.0"
 backend = "aqua:casey/just"
 specifiers = ["latest"]
 
+[tools.just."platforms.linux-arm64"]
+checksum = "sha256:23871b1702bfd550fb5f901778fd4290ecf2ee034a45a889fbe96d89b188086d"
+url = "https://github.com/casey/just/releases/download/1.59.0/just-1.59.0-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/casey/just/releases/assets/642950086"
+
 [tools.just."platforms.linux-x64"]
-checksum = "sha256:4a5cc2f53e6f0f8c59092a6cc38291eb729d46a7dd95d3ae582008881b84931d"
-url = "https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/casey/just/releases/assets/500509978"
+checksum = "sha256:409044617b6f06517c1035e55ca38c8c856ff8b650e41bc2aa1ef82d5903a23e"
+url = "https://github.com/casey/just/releases/download/1.59.0/just-1.59.0-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/casey/just/releases/assets/642949555"
 
 [tools.just."platforms.macos-arm64"]
-checksum = "sha256:50ae3e996c974a0bf32ea7d10f495070df33f1b43e0616b2769e3d4821ed8f48"
-url = "https://github.com/casey/just/releases/download/1.58.0/just-1.58.0-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/casey/just/releases/assets/500509965"
+checksum = "sha256:6574cea774ed4cae12e24b6aa11857de33e80dab4667cf628fd5840df96a2a9d"
+url = "https://github.com/casey/just/releases/download/1.59.0/just-1.59.0-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/casey/just/releases/assets/643129724"
 
 [[tools.node]]
-version = "26.10.0"
+version = "26.12.1"
 backend = "core:node"
 specifiers = ["latest"]
 
+[tools.node."platforms.linux-arm64"]
+checksum = "sha256:a6c01af459dd8972ab3fb08ee5da81244d26ba8c4944a62d5bbba8c597ae154f"
+url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-arm64.tar.gz"
+
 [tools.node."platforms.linux-x64"]
-checksum = "sha256:cb5c9ce9c80d7b8821e3a258543c71b939138cf17c74d5cc44bbe85d6dbc5ad8"
-url = "https://nodejs.org/dist/v26.10.0/node-v26.10.0-linux-x64.tar.gz"
+checksum = "sha256:0fd1eb7770598f52a21995edf6ed35fc690400fa437c2386af329519e9143132"
+url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:751fdf7439f115d87ee2a8f3f18c065b6151852068e3e666ac60ac2996f75ac9"
-url = "https://nodejs.org/dist/v26.10.0/node-v26.10.0-darwin-arm64.tar.gz"
+checksum = "sha256:1901d539912c02afa10d1cc126943a8855a7eedebe830119463470db5e6c59e8"
+url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-darwin-arm64.tar.gz"
 
 [[tools."npm:prettier"]]
 version = "3.9.9"
@@ -63,20 +89,26 @@ backend = "npm:prettier"
 specifiers = ["latest"]
 
 [[tools.pnpm]]
-version = "12.6.0"
+version = "12.15.0"
 backend = "aqua:pnpm/pnpm"
 specifiers = ["latest"]
 
+[tools.pnpm."platforms.linux-arm64"]
+checksum = "sha256:d7ce93a2c7d847d3a34bd3f559b60c14f578b1320c17cc352a2c5c5fdf956117"
+url = "https://github.com/pnpm/pnpm/releases/download/v12.15.0/pnpm-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/662173352"
+provenance = "github-attestations"
+
 [tools.pnpm."platforms.linux-x64"]
-checksum = "sha256:3f4c66f668d0e84219679982d095b30da68325e1fac9284e7f5dc1584bd3d13e"
-url = "https://github.com/pnpm/pnpm/releases/download/v12.6.0/pnpm-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/581813243"
+checksum = "sha256:55b5ed0092bd11176c1669598e231ae52e7cedac59de6efd0d415730f37d0598"
+url = "https://github.com/pnpm/pnpm/releases/download/v12.15.0/pnpm-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/662173360"
 provenance = "github-attestations"
 
 [tools.pnpm."platforms.macos-arm64"]
-checksum = "sha256:1030f38e14fa2e6c87fe6ab0313a3bf3b794a961504f4439bad2ca2110d3583e"
-url = "https://github.com/pnpm/pnpm/releases/download/v12.6.0/pnpm-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/581813250"
+checksum = "sha256:6a41a2877773e97f19832067187cc6fc82e186d8a2cf91fec4b4c1a5fbd6ef27"
+url = "https://github.com/pnpm/pnpm/releases/download/v12.15.0/pnpm-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/662173343"
 provenance = "github-attestations"
 
 [[tools.rust]]
@@ -88,6 +120,11 @@ specifiers = ["latest"]
 version = "0.6.2"
 backend = "github:kristoff-it/superhtml"
 specifiers = ["0.6.2"]
+
+[tools.superhtml."platforms.linux-arm64"]
+checksum = "sha256:2d21672c0a9290f4e4e2003a41c1b5ec16fae0419a62810abe4ac65546a62896"
+url = "https://github.com/kristoff-it/superhtml/releases/download/v0.6.2/aarch64-linux.tar.xz"
+url_api = "https://api.github.com/repos/kristoff-it/superhtml/releases/assets/303689381"
 
 [tools.superhtml."platforms.linux-x64"]
 checksum = "sha256:e6dd0bd6223d6fb925843800086ece2fb11d8973e08a2d9ccc7a76ce7d0a36e3"
