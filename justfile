@@ -39,22 +39,15 @@ site-with-violations-typecheck: site-with-violations-dependencies
     pnpm typecheck
 
 [working-directory('./projects/site-with-violations')]
-site-with-violations-build: site-with-violations-dependencies
+site-with-violations: site-with-violations-dependencies
     pnpm build
-
-[working-directory('./projects/site-with-violations')]
-site-with-violations: site-with-violations-build
     pnpm preview
 
 [working-directory('projects/exploratory-server')]
-exploratory-server-dependencies:
-    pwd
+exploratory-server-typecheck:
     pnpm i --frozen-lockfile
-
-[working-directory('projects/exploratory-server')]
-exploratory-server-typecheck: exploratory-server-dependencies
     pnpm typecheck
 
 [working-directory('projects/exploratory-server')]
-exploratory-server: exploratory-server-dependencies
+exploratory-server:
     pnpm preview
