@@ -82,20 +82,10 @@ url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-linux-x64.tar.gz"
 checksum = "sha256:1901d539912c02afa10d1cc126943a8855a7eedebe830119463470db5e6c59e8"
 url = "https://nodejs.org/dist/v26.12.1/node-v26.12.1-darwin-arm64.tar.gz"
 
-[[tools."npm:prettier"]]
-version = "3.9.9"
-aube = { path = ".mise/locks/npm-prettier/3.9.9", digest = "sha256:815f6667505e41ac2d03ecbac86b79f1beb78d45783879428193c9adc80760a3" }
-backend = "npm:prettier"
-specifiers = ["latest"]
-
 [[tools."npm:typescript"]]
 version = "7.0.2"
+aube = { path = ".mise/locks/npm-typescript/7.0.2", digest = "sha256:3d06b3b23564c68cdad7815c356edb1506fab1c42bfb8c54234134fd9650ec17" }
 backend = "npm:typescript"
-specifiers = ["latest"]
-
-[[tools."npm:typescript-language-server"]]
-version = "6.0.2"
-backend = "npm:typescript-language-server"
 specifiers = ["latest"]
 
 [[tools.pnpm]]
