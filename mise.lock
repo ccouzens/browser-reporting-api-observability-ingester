@@ -88,6 +88,16 @@ aube = { path = ".mise/locks/npm-prettier/3.9.9", digest = "sha256:815f6667505e4
 backend = "npm:prettier"
 specifiers = ["latest"]
 
+[[tools."npm:typescript"]]
+version = "7.0.2"
+backend = "npm:typescript"
+specifiers = ["latest"]
+
+[[tools."npm:typescript-language-server"]]
+version = "6.0.2"
+backend = "npm:typescript-language-server"
+specifiers = ["latest"]
+
 [[tools.pnpm]]
 version = "12.15.0"
 backend = "aqua:pnpm/pnpm"
