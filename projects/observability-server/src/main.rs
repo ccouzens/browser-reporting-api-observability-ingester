@@ -4,6 +4,9 @@ use axum::{
     routing::{get, post},
 };
 use serde::{Deserialize, Serialize};
+mod stripped_url;
+use stripped_url::StrippedUrl;
+use url::Url;
 
 #[derive(thiserror::Error, Debug)]
 pub enum TopLevelError {
@@ -48,12 +51,19 @@ enum CreateReportBody {
     #[serde(rename = "csp-violation")]
     CspViolation {
         /**
-        The result of executing Strip URL for use in reports on violation’s url.
+        Each violation has a global object, which is the global object whose policy has been violated.
 
-        https://w3c.github.io/webappsec-csp/#dom-cspviolationreportbody-documenturl
+        Each violation has a url which is its global object’s URL.
+        https://w3c.github.io/webappsec-csp/#framework-violation
         */
         #[serde(rename = "documentURL")]
-        document_url: String,
+        document_url: Url,
+        /**
+        Each violation has a referrer, which is either null, or a URL. It represents the referrer of the resource whose policy was violated.
+
+        https://w3c.github.io/webappsec-csp/#framework-violation
+        */
+        referrer: Option<Url>,
     },
     #[serde(other)]
     UnknownViolation,
@@ -71,7 +81,8 @@ struct CreateReport {
     Each report has a url, which is typically the address of the Document or Worker from which the report was generated.
 
     https://www.w3.org/TR/reporting-1/#report-url */
-    url: String,
+    #[serde(serialize_with = "Url::to_string")]
+    url: Url,
     /**
     Each report has a user agent, which is the value of the User-Agent header of the request from which the report was generated.
 
