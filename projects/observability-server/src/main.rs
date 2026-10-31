@@ -3,8 +3,10 @@ use axum::{
     http::StatusCode,
     routing::{get, post},
 };
-use serde::{Deserialize, Serialize};
+mod report;
+mod report_body;
 mod stripped_url;
+use report::Report;
 use stripped_url::StrippedUrl;
 
 #[derive(thiserror::Error, Debug)]
@@ -34,66 +36,7 @@ async fn status() -> &'static str {
     "ok"
 }
 
-async fn create_report(Json(payload): Json<Vec<CreateReport>>) -> (StatusCode, String) {
+async fn create_report(Json(payload): Json<Vec<Report>>) -> (StatusCode, String) {
     println!("{:?}", payload);
     (StatusCode::CREATED, "".to_string())
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(tag = "type", content = "body")]
-enum CreateReportBody {
-    /**
-    Content Security Policy
-
-    https://w3c.github.io/webappsec-csp/#reporting
-    */
-    #[serde(rename = "csp-violation")]
-    CspViolation {
-        /**
-        Each violation has a global object, which is the global object whose policy has been violated.
-
-        Each violation has a url which is its global object’s URL.
-        https://w3c.github.io/webappsec-csp/#framework-violation
-        */
-        #[serde(rename = "documentURL")]
-        document_url: StrippedUrl,
-        /**
-        Each violation has a referrer, which is either null, or a URL. It represents the referrer of the resource whose policy was violated.
-
-        https://w3c.github.io/webappsec-csp/#framework-violation
-        */
-        referrer: Option<StrippedUrl>,
-    },
-    #[serde(other)]
-    UnknownViolation,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-struct CreateReport {
-    /**
-    The number of milliseconds between report’s timestamp and the current time.
-
-    https://www.w3.org/TR/reporting-1/#serialize-reports
-    */
-    age: u32,
-    /**
-    Each report has a url, which is typically the address of the Document or Worker from which the report was generated.
-
-    https://www.w3.org/TR/reporting-1/#report-url */
-    url: StrippedUrl,
-    /**
-    Each report has a user agent, which is the value of the User-Agent header of the request from which the report was generated.
-
-    Note: The user agent of a report represents the User-Agent sent by the browser for the page which generated the report. This is potentially distinct from the User-Agent sent in the HTTP headers when uploading the report to a collector — for instance, where the browser has chosen to use a non-default User-Agent string such as the "request desktop site" feature.
-
-    https://www.w3.org/TR/reporting-1/#report-user-agent
-    */
-    user_agent: String,
-    /**
-    Each report has a body, which is either null or an object which can be serialized into a JSON text. The fields contained in a report’s body are determined by the report’s type.
-
-    https://www.w3.org/TR/reporting-1/#report-body
-    */
-    #[serde(flatten)]
-    body: CreateReportBody,
 }
