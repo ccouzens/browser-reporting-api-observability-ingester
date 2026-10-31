@@ -6,7 +6,6 @@ use axum::{
 use serde::{Deserialize, Serialize};
 mod stripped_url;
 use stripped_url::StrippedUrl;
-use url::Url;
 
 #[derive(thiserror::Error, Debug)]
 pub enum TopLevelError {
@@ -57,13 +56,13 @@ enum CreateReportBody {
         https://w3c.github.io/webappsec-csp/#framework-violation
         */
         #[serde(rename = "documentURL")]
-        document_url: Url,
+        document_url: StrippedUrl,
         /**
         Each violation has a referrer, which is either null, or a URL. It represents the referrer of the resource whose policy was violated.
 
         https://w3c.github.io/webappsec-csp/#framework-violation
         */
-        referrer: Option<Url>,
+        referrer: Option<StrippedUrl>,
     },
     #[serde(other)]
     UnknownViolation,
@@ -81,8 +80,7 @@ struct CreateReport {
     Each report has a url, which is typically the address of the Document or Worker from which the report was generated.
 
     https://www.w3.org/TR/reporting-1/#report-url */
-    #[serde(serialize_with = "Url::to_string")]
-    url: Url,
+    url: StrippedUrl,
     /**
     Each report has a user agent, which is the value of the User-Agent header of the request from which the report was generated.
 
