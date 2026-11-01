@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{report_body::ReportBody, stripped_url::StrippedUrl};
+use super::{ReportBody, StrippedUrl};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Report {

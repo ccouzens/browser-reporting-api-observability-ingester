@@ -3,11 +3,8 @@ use axum::{
     http::StatusCode,
     routing::{get, post},
 };
-mod report;
-mod report_body;
-mod stripped_url;
-use report::Report;
-use stripped_url::StrippedUrl;
+mod serialized;
+use serialized::Report;
 
 #[derive(thiserror::Error, Debug)]
 pub enum TopLevelError {
