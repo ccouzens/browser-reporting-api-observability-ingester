@@ -25,7 +25,7 @@ impl<'de> Deserialize<'de> for StrippedUrl {
         D: Deserializer<'de>,
     {
         let s = String::deserialize(deserializer)?;
-        if s.starts_with(|c| matches!(c, 'a'..='z' | 'A'..='Z'))
+        if s.starts_with(|c: char| c.is_ascii_alphabetic())
             && s.chars()
                 .skip(1)
                 .all(|c| matches!(c, 'a'..='z' | 'A'..='Z' | '0'..='9' | '+' | '-' | '.'))
@@ -33,14 +33,7 @@ impl<'de> Deserialize<'de> for StrippedUrl {
             return Ok(Self::Scheme(s.to_ascii_lowercase()));
         }
         match Url::parse(&s) {
-            Ok(url)
-                if url.scheme() == "https"
-                    && url.fragment().is_none()
-                    && url.username().is_empty()
-                    && url.password().is_none() =>
-            {
-                Ok(Self::Url(url))
-            }
+            Ok(url) => Ok(Self::Url(url)),
             _ => Err(D::Error::invalid_value(
                 serde::de::Unexpected::Str(&s),
                 &"a https url or other scheme after the Strip URL steps",
@@ -93,9 +86,9 @@ mod tests {
 
     #[test]
     fn test_deserialize_http_url() {
-        assert_matches!(
-            serde_json::from_str(r#""http://example.com/api""#),
-            Result::<StrippedUrl, _>::Err(_)
+        assert_eq!(
+            serde_json::from_str::<StrippedUrl>(r#""http://example.com/api""#).unwrap(),
+            StrippedUrl::Url(Url::parse("http://example.com/api").unwrap())
         );
     }
 
