@@ -1,0 +1,17 @@
+{
+	"type": "csp-violation",
+	"url": "https://accommodate-tasks-assumptions-exploration.trycloudflare.com/",
+	"body": {
+		"documentURL": "https://accommodate-tasks-assumptions-exploration.trycloudflare.com/",
+		"disposition": "enforce",
+		"referrer": "",
+		"effectiveDirective": "img-src",
+		"blockedURL": "blob",
+		"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to reports",
+		"statusCode": 200,
+		"sample": "",
+		"sourceFile": "https://accommodate-tasks-assumptions-exploration.trycloudflare.com:443/assets/index-BIAicTOC.js",
+		"lineNumber": 7,
+		"columnNumber": 10
+	}
+}
