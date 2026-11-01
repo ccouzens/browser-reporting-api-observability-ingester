@@ -1,0 +1,71 @@
+[
+	{
+		"age": 3,
+		"body": {
+			"connection": "https://www.gstatic.com/devrel-devsite/prod/v097103d8ccd7b257790809ea4cc5e5fee6daa6e24890a4af388296e58364bc31/chrome/images/lockup.svg",
+			"disposition": "report"
+		},
+		"type": "connection-allowlist",
+		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+	},
+	{
+		"age": 16327,
+		"body": {
+			"blockedURL": "blob",
+			"disposition": "enforce",
+			"documentURL": "https://before-italiano-expert-contributions.trycloudflare.com/",
+			"effectiveDirective": "img-src",
+			"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
+			"referrer": "",
+			"sample": "",
+			"statusCode": 200
+		},
+		"type": "csp-violation",
+		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+	},
+	{
+		"age": 16396,
+		"body": {
+			"blockedURL": "data",
+			"disposition": "enforce",
+			"documentURL": "https://before-italiano-expert-contributions.trycloudflare.com/",
+			"effectiveDirective": "img-src",
+			"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
+			"referrer": "",
+			"sample": "",
+			"statusCode": 200
+		},
+		"type": "csp-violation",
+		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+	},
+	{
+		"age": 16327,
+		"body": {
+			"columnNumber": 1,
+			"disposition": "enforce",
+			"lineNumber": 10,
+			"message": "Permissions policy violation: unload is not allowed in this document.",
+			"policyId": "unload",
+			"sourceFile": "https://before-italiano-expert-contributions.trycloudflare.com/assets/index-BIAicTOC.js"
+		},
+		"type": "permissions-policy-violation",
+		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+	},
+	{
+		"age": 119918,
+		"body": {
+			"columnNumber": 1,
+			"id": "UnloadHandler",
+			"lineNumber": 10,
+			"message": "Unload event listeners are deprecated and will be removed.",
+			"sourceFile": "https://before-italiano-expert-contributions.trycloudflare.com/assets/index-BIAicTOC.js"
+		},
+		"type": "deprecation",
+		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+	}
+]

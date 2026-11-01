@@ -1,0 +1,59 @@
+[
+	{
+		"age": 4,
+		"type": "csp-violation",
+		"url": "http://localhost:4173/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0",
+		"body": {
+			"documentURL": "http://localhost:4173/",
+			"blockedURL": "data",
+			"referrer": null,
+			"effectiveDirective": "img-src",
+			"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
+			"sourceFile": null,
+			"sample": null,
+			"disposition": "enforce",
+			"statusCode": 200,
+			"lineNumber": null,
+			"columnNumber": null
+		}
+	},
+	{
+		"age": 4,
+		"type": "csp-violation",
+		"url": "http://localhost:4173/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0",
+		"body": {
+			"documentURL": "http://localhost:4173/",
+			"blockedURL": "data",
+			"referrer": null,
+			"effectiveDirective": "img-src",
+			"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
+			"sourceFile": "http://localhost:4173/assets/index-BIAicTOC.js",
+			"sample": null,
+			"disposition": "enforce",
+			"statusCode": 200,
+			"lineNumber": 3,
+			"columnNumber": 1
+		}
+	},
+	{
+		"age": 4,
+		"type": "csp-violation",
+		"url": "http://localhost:4173/",
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0",
+		"body": {
+			"documentURL": "http://localhost:4173/",
+			"blockedURL": "blob",
+			"referrer": null,
+			"effectiveDirective": "img-src",
+			"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
+			"sourceFile": "http://localhost:4173/assets/index-BIAicTOC.js",
+			"sample": null,
+			"disposition": "enforce",
+			"statusCode": 200,
+			"lineNumber": 7,
+			"columnNumber": 21
+		}
+	}
+]
