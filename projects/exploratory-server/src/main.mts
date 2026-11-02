@@ -1,6 +1,5 @@
 import * as http from "node:http";
 import { json } from "node:stream/consumers";
-import * as util from "node:util";
 
 const server = http
 	.createServer(async (req, res) => {
@@ -8,11 +7,16 @@ const server = http
 		const { method, headersDistinct } = req;
 		const body = await json(req).catch(() => null);
 		console.log(
-			util.inspect(
-				{ pathname, searchParams, method, body, headersDistinct },
-				false,
-				10,
-				true,
+			JSON.stringify(
+				{
+					pathname,
+					searchParams: [...searchParams.entries()],
+					method,
+					body,
+					headersDistinct,
+				},
+				null,
+				2,
 			),
 		);
 		res.setHeaders(

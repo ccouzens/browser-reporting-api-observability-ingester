@@ -1,71 +1,81 @@
-[
-	{
-		"age": 3,
-		"body": {
-			"connection": "https://www.gstatic.com/devrel-devsite/prod/v097103d8ccd7b257790809ea4cc5e5fee6daa6e24890a4af388296e58364bc31/chrome/images/lockup.svg",
-			"disposition": "report"
+{
+	"pathname": "/reports",
+	"searchParams": [],
+	"method": "POST",
+	"body": [
+		{
+			"age": 7,
+			"body": {
+				"connection": "https://www.gstatic.com/devrel-devsite/prod/v097103d8ccd7b257790809ea4cc5e5fee6daa6e24890a4af388296e58364bc31/chrome/images/lockup.svg",
+				"disposition": "report"
+			},
+			"type": "connection-allowlist",
+			"url": "https://happen-land-comp-basically.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
 		},
-		"type": "connection-allowlist",
-		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
-		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
-	},
-	{
-		"age": 16327,
-		"body": {
-			"blockedURL": "blob",
-			"disposition": "enforce",
-			"documentURL": "https://before-italiano-expert-contributions.trycloudflare.com/",
-			"effectiveDirective": "img-src",
-			"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
-			"referrer": "",
-			"sample": "",
-			"statusCode": 200
+		{
+			"age": 59891,
+			"body": {
+				"columnNumber": 1,
+				"disposition": "enforce",
+				"lineNumber": 10,
+				"message": "Permissions policy violation: unload is not allowed in this document.",
+				"policyId": "unload",
+				"sourceFile": "https://happen-land-comp-basically.trycloudflare.com/assets/index-BIAicTOC.js"
+			},
+			"type": "permissions-policy-violation",
+			"url": "https://happen-land-comp-basically.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
 		},
-		"type": "csp-violation",
-		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
-		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
-	},
-	{
-		"age": 16396,
-		"body": {
-			"blockedURL": "data",
-			"disposition": "enforce",
-			"documentURL": "https://before-italiano-expert-contributions.trycloudflare.com/",
-			"effectiveDirective": "img-src",
-			"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
-			"referrer": "",
-			"sample": "",
-			"statusCode": 200
+		{
+			"age": 59990,
+			"body": {
+				"blockedURL": "data",
+				"disposition": "enforce",
+				"documentURL": "https://happen-land-comp-basically.trycloudflare.com/",
+				"effectiveDirective": "img-src",
+				"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
+				"referrer": "",
+				"sample": "",
+				"statusCode": 200
+			},
+			"type": "csp-violation",
+			"url": "https://happen-land-comp-basically.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
 		},
-		"type": "csp-violation",
-		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
-		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
-	},
-	{
-		"age": 16327,
-		"body": {
-			"columnNumber": 1,
-			"disposition": "enforce",
-			"lineNumber": 10,
-			"message": "Permissions policy violation: unload is not allowed in this document.",
-			"policyId": "unload",
-			"sourceFile": "https://before-italiano-expert-contributions.trycloudflare.com/assets/index-BIAicTOC.js"
-		},
-		"type": "permissions-policy-violation",
-		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
-		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
-	},
-	{
-		"age": 119918,
-		"body": {
-			"columnNumber": 1,
-			"id": "UnloadHandler",
-			"lineNumber": 10,
-			"message": "Unload event listeners are deprecated and will be removed.",
-			"sourceFile": "https://before-italiano-expert-contributions.trycloudflare.com/assets/index-BIAicTOC.js"
-		},
-		"type": "deprecation",
-		"url": "https://before-italiano-expert-contributions.trycloudflare.com/",
-		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+		{
+			"age": 59891,
+			"body": {
+				"blockedURL": "blob",
+				"disposition": "enforce",
+				"documentURL": "https://happen-land-comp-basically.trycloudflare.com/",
+				"effectiveDirective": "img-src",
+				"originalPolicy": "img-src 'self' https://www.gstatic.com; report-to default",
+				"referrer": "",
+				"sample": "",
+				"statusCode": 200
+			},
+			"type": "csp-violation",
+			"url": "https://happen-land-comp-basically.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		}
+	],
+	"headersDistinct": {
+		"host": ["localhost:4174"],
+		"user-agent": [
+			"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		],
+		"accept-encoding": ["gzip"],
+		"accept-language": ["en-GB,en-US;q=0.9,en;q=0.8"],
+		"cdn-loop": ["cloudflare; loops=1; subreqs=1"],
+		"cf-ew-via": ["15"],
+		"cf-visitor": ["{\"scheme\":\"https\"}"],
+		"cf-warp-tag-id": ["1ccd6685-3982-49a5-864e-20eae027bd99"],
+		"cf-worker": ["trycloudflare.com"],
+		"connection": ["close"],
+		"content-type": ["application/reports+json"],
+		"origin": ["https://happen-land-comp-basically.trycloudflare.com"],
+		"priority": ["u=4, i"],
+		"x-forwarded-proto": ["https"]
 	}
-]
+}
