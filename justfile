@@ -1,5 +1,5 @@
 [parallel]
-format: format-biome format-just format-superhtml observability-server-format
+format: format-biome format-just format-superhtml format-toml observability-server-format
 
 [parallel]
 typecheck: site-with-violations-typecheck exploratory-server-typecheck
@@ -12,6 +12,9 @@ format-just:
 
 format-superhtml:
     superhtml fmt projects/site-with-violations/*.html
+
+format-toml:
+    tombi format .    
 
 https-server:
     cloudflared tunnel --url http://localhost:4173
