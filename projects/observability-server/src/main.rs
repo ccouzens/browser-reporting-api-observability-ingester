@@ -4,7 +4,6 @@ use axum::{
     routing::{get, post},
 };
 mod serialized;
-use serialized::Report;
 
 #[derive(thiserror::Error, Debug)]
 pub enum TopLevelError {
@@ -33,7 +32,9 @@ async fn status() -> &'static str {
     "ok"
 }
 
-async fn create_report(Json(payload): Json<Vec<Report>>) -> (StatusCode, String) {
+async fn create_report(
+    Json(payload): Json<Vec<serialized::application_reports_json::Report>>,
+) -> (StatusCode, String) {
     println!("{:?}", payload);
     (StatusCode::CREATED, "".to_string())
 }
