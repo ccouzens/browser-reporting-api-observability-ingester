@@ -33,7 +33,7 @@ async fn status() -> &'static str {
 }
 
 async fn create_report(
-    Json(payload): Json<Vec<serialized::application_reports_json::Report>>,
+    Json(payload): Json<serialized::application_reports_json::Reports>,
 ) -> (StatusCode, String) {
     println!("{:?}", payload);
     (StatusCode::CREATED, "".to_string())
