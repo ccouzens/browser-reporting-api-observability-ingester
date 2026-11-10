@@ -3,7 +3,7 @@ use axum::{
     http::StatusCode,
     routing::{get, post},
 };
-mod serialized;
+mod application_reports_json;
 
 #[derive(thiserror::Error, Debug)]
 pub enum TopLevelError {
@@ -33,7 +33,7 @@ async fn status() -> &'static str {
 }
 
 async fn create_report(
-    Json(payload): Json<serialized::application_reports_json::Reports>,
+    Json(payload): Json<application_reports_json::Reports>,
 ) -> (StatusCode, String) {
     println!("{:?}", payload);
     (StatusCode::CREATED, "".to_string())
