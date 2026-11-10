@@ -3,10 +3,6 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
-	"scripts": {
-		"preview": "node src/main.mts",
-		"typecheck": "tsc"
-	},
 	"devDependencies": {
 		"@types/node": "^26.6.4"
 	}

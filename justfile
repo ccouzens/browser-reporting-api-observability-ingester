@@ -39,18 +39,18 @@ site-with-violations-dependencies:
 
 [working-directory('./projects/site-with-violations')]
 site-with-violations-typecheck: site-with-violations-dependencies
-    pnpm typecheck
+    tsc
 
 [working-directory('./projects/site-with-violations')]
 site-with-violations: site-with-violations-dependencies
-    pnpm build
-    pnpm preview
+    pnpm exec vite build
+    pnpm exec vite preview
 
 [working-directory('projects/exploratory-server')]
 exploratory-server-typecheck:
     pnpm i --frozen-lockfile
-    pnpm typecheck
+    tsc
 
 [working-directory('projects/exploratory-server')]
 exploratory-server:
-    pnpm preview
+    node src/main.mts
