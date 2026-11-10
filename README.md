@@ -113,6 +113,7 @@ in the structured JSON logs.
 
 Options here are a matrix of urls, and url properties. Several different URLs
 are available
+
 1. `reporting_url`: the url of the endpoint that this service is hosted on, and
    the client connects from.
 2. `document_url`: the url of the document that the report was generated from.
