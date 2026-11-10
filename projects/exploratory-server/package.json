@@ -4,6 +4,6 @@
 	"version": "0.0.0",
 	"type": "module",
 	"devDependencies": {
-		"@types/node": "^26.6.4"
+		"@types/node": "^26.6.6"
 	}
 }
