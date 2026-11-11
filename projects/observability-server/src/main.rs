@@ -36,5 +36,9 @@ async fn create_report(
     Json(payload): Json<application_reports_json::Reports>,
 ) -> (StatusCode, String) {
     println!("{:?}", payload);
+    println!(
+        "{}",
+        serde_json::to_string_pretty(&payload).unwrap_or_default()
+    );
     (StatusCode::CREATED, "".to_string())
 }
