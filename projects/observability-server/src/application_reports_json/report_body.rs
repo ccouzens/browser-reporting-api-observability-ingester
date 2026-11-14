@@ -1,5 +1,17 @@
 use super::StrippedUrl;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, de::IntoDeserializer};
+
+fn empty_string_as_none<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
+where
+    D: Deserializer<'de>,
+    T: Deserialize<'de>,
+{
+    let opt = Option::<String>::deserialize(deserializer)?;
+    match opt.as_deref() {
+        None | Some("") => Ok(None),
+        Some(s) => T::deserialize(s.into_deserializer()).map(Some),
+    }
+}
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "body")]
@@ -24,6 +36,7 @@ pub enum ReportBody {
 
         https://w3c.github.io/webappsec-csp/#framework-violation
         */
+        #[serde(deserialize_with = "empty_string_as_none")]
         referrer: Option<StrippedUrl>,
     },
     #[serde(other)]

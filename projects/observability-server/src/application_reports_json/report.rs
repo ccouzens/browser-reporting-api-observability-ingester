@@ -9,7 +9,8 @@ pub struct Report {
 
     https://www.w3.org/TR/reporting-1/#serialize-reports
     */
-    age: u32,
+    #[serde(default)]
+    age: Option<u32>,
     /**
     Each report has a url, which is typically the address of the Document or Worker from which the report was generated.
 
@@ -22,7 +23,8 @@ pub struct Report {
 
     https://www.w3.org/TR/reporting-1/#report-user-agent
     */
-    user_agent: String,
+    #[serde(default)]
+    user_agent: Option<String>,
     /**
     Each report has a body, which is either null or an object which can be serialized into a JSON text. The fields contained in a report’s body are determined by the report’s type.
 
