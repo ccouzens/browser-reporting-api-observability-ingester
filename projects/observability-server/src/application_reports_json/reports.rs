@@ -32,7 +32,7 @@ mod tests {
             let file_name = entry.file_name().to_string_lossy();
             if file_name.ends_with(".json")
                 && !file_name.ends_with(".parsed-body.json")
-                && file_name.ends_with("2026-11-01-site-with-violations-single.json")
+                && file_name.ends_with("2026-11-01-site-with-violations-composite.json")
             {
                 let file = File::open(entry.path()).unwrap();
                 let reader = BufReader::new(file);

@@ -39,6 +39,9 @@ pub enum ReportBody {
         #[serde(deserialize_with = "empty_string_as_none")]
         referrer: Option<StrippedUrl>,
     },
-    #[serde(other)]
-    UnknownViolation,
+    #[serde(untagged)]
+    UnknownViolation {
+        r#type: String,
+        body: serde_json::Value,
+    },
 }
