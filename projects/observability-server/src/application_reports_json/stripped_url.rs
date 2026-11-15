@@ -3,7 +3,9 @@ use url::Url;
 
 /**
 5.4. Strip URL for use in reports
-Given a URL url, this algorithm returns a string representing the URL for use in violation reports:
+
+Given a URL url, this algorithm returns a string representing the URL for use in
+violation reports:
 
 1. If url’s scheme is not an HTTP(S) scheme, then return url’s scheme.
 2. Set url’s fragment to the empty string.
@@ -11,7 +13,9 @@ Given a URL url, this algorithm returns a string representing the URL for use in
 4. Set url’s password to the empty string.
 5. Return the result of executing the URL serializer on url.
 
-https://w3c.github.io/webappsec-csp/#strip-url-for-use-in-reports
+- https://w3c.github.io/webappsec-csp/#strip-url-for-use-in-reports
+- https://w3c.github.io/reporting/#strip-url-for-use-in-reports
+- https://www.w3.org/TR/reporting-1/#strip-url-for-use-in-reports
 */
 #[derive(Debug, PartialEq, Eq)]
 pub enum StrippedUrl {

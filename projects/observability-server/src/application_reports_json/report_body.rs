@@ -68,7 +68,7 @@ pub enum ReportBody {
         - https://w3c.github.io/webappsec-csp/#violation-referrer
         - https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport#referrer
         */
-        #[serde(deserialize_with = "empty_string_as_none")]
+        #[serde(default, deserialize_with = "empty_string_as_none")]
         referrer: Option<StrippedUrl>,
         /**
         Each violation has a resource, which is either null, "inline", "eval",
@@ -115,7 +115,7 @@ pub enum ReportBody {
         - https://w3c.github.io/webappsec-csp/#violation-sample
         - https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport#sample
         */
-        #[serde(deserialize_with = "empty_string_as_none")]
+        #[serde(default, deserialize_with = "empty_string_as_none")]
         sample: Option<String>,
         /**
         Each violation has a disposition, which is the disposition of the
