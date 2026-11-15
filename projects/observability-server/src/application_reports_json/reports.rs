@@ -22,25 +22,24 @@ mod tests {
     }
 
     #[test]
-    fn it_works() {
-        println!("got here");
+    fn it_parses_captured_examples() {
         for entry in WalkDir::new(Path::new(env!("CARGO_MANIFEST_DIR")).join("../example-reports/"))
             .into_iter()
             .filter_map(|e| e.ok())
             .filter(|e| e.file_type().is_file())
         {
             let file_name = entry.file_name().to_string_lossy();
-            if file_name.ends_with(".json")
-                && !file_name.ends_with(".parsed-body.json")
-                && file_name.ends_with("2026-11-01-site-with-violations-composite.json")
-            {
-                let file = File::open(entry.path()).unwrap();
-                let reader = BufReader::new(file);
-                let example_report: ExampleReport = serde_json::from_reader(reader).unwrap();
-                println!("{:?}", &example_report);
+            if file_name.ends_with(".json") {
                 println!(
                     "{}",
-                    serde_json::to_string_pretty(&example_report.body).unwrap()
+                    serde_json::to_string_pretty(
+                        &serde_json::from_reader::<_, ExampleReport>(BufReader::new(
+                            File::open(entry.path()).unwrap()
+                        ))
+                        .unwrap()
+                        .body
+                    )
+                    .unwrap()
                 );
             }
         }
