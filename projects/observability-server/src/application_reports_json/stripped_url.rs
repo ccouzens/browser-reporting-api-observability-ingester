@@ -13,9 +13,9 @@ violation reports:
 4. Set url’s password to the empty string.
 5. Return the result of executing the URL serializer on url.
 
-- https://w3c.github.io/webappsec-csp/#strip-url-for-use-in-reports
-- https://w3c.github.io/reporting/#strip-url-for-use-in-reports
-- https://www.w3.org/TR/reporting-1/#strip-url-for-use-in-reports
+- <https://w3c.github.io/webappsec-csp/#strip-url-for-use-in-reports>
+- <https://w3c.github.io/reporting/#strip-url-for-use-in-reports>
+- <https://www.w3.org/TR/reporting-1/#strip-url-for-use-in-reports>
 */
 #[derive(Debug, PartialEq, Eq)]
 pub enum StrippedUrl {
