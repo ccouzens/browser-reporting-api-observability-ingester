@@ -1,4 +1,4 @@
-use super::{BlockedUrl, CspDirective, SecurityPolicyViolationEventDisposition, StrippedUrl};
+use super::{BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, StrippedUrl};
 use serde::{Deserialize, Deserializer, Serialize, de::IntoDeserializer};
 
 fn empty_string_as_none<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
@@ -22,6 +22,74 @@ where
 )]
 pub enum ReportBody {
     /**
+    Connection Allowlist Violation Reports
+
+    Connection allowlist violation reports indicate that a context (such as a
+    Document or Worker) attempted to connect to a destination not permitted by
+    an active or report-only Connection Allowlist policy.
+
+    Specifications & Documentation:
+    - https://wicg.github.io/connection-allowlists/#reporting
+    - https://wicg.github.io/connection-allowlists/#dictdef-connectionallowlistviolationreport
+    - https://developer.mozilla.org/en-US/docs/Web/API/ReportingObserver
+    - https://developer.chrome.com/blog/connection-allowlists
+    - https://web.dev/articles/reporting-api
+
+    Browser Implementations:
+    - Chromium (Blink):
+      - https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/connection_allowlist_violation_report_body.idl
+      - https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/connection_allowlist_violation_report_body.h
+      - https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/connection_allowlist_violation_report_body.cc
+      - https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/modules/peerconnection/rtc_peer_connection.cc
+      - https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/services/network/network_service_network_delegate.cc
+    - Gecko (Firefox): Not implemented
+      - https://github.com/mozilla/standards-positions/issues/1322
+    - WebKit (Safari): Not implemented
+      - https://github.com/WebKit/standards-positions/issues/583
+    */
+    ConnectionAllowlist {
+        /**
+        environment’s creation URL, stripped for use in reports.
+
+        - https://wicg.github.io/connection-allowlists/#dom-connectionallowlistviolationreport-url
+        - https://wicg.github.io/connection-allowlists/#reporting
+        */
+        url: Option<StrippedUrl>,
+        /**
+        ConnectionAllowlistViolationReport’s connection is the serialized URL of
+        the connection which violated the allowlist.
+
+        If resource URL is a URL, then resource URL, stripped for use in
+        reports. Otherwise, resource URL.
+
+        - https://wicg.github.io/connection-allowlists/#dom-connectionallowlistviolationreport-connection
+        - https://wicg.github.io/connection-allowlists/#reporting
+        */
+        connection: ConnectionAllowlistConnection,
+        /**
+        ConnectionAllowlistViolationReport’s allowlist is the allowlist which
+        was violated.
+
+        A new list containing the result of serializing each pattern in
+        allowlist’s allowlist.
+
+        - https://wicg.github.io/connection-allowlists/#dom-connectionallowlistviolationreport-allowlist
+        - https://wicg.github.io/connection-allowlists/#connection-allowlists
+        - https://wicg.github.io/connection-allowlists/#reporting
+        */
+        allowlist: Option<Vec<String>>,
+        /**
+        ConnectionAllowlistViolationReport’s disposition is the allowlist’s
+        disposition.
+
+        - https://wicg.github.io/connection-allowlists/#dom-connectionallowlistviolationreport-disposition
+        - https://wicg.github.io/connection-allowlists/#enumdef-connectionallowlistdisposition
+        - https://wicg.github.io/connection-allowlists/#connection-allowlists
+        - https://wicg.github.io/connection-allowlists/#reporting
+        */
+        disposition: Disposition,
+    },
+    /**
     Content Security Policy Violation Reports
 
     CSP violation reports indicate that a resource or action on a page violated
@@ -32,6 +100,8 @@ pub enum ReportBody {
     - https://w3c.github.io/webappsec-csp/#cspviolationreportbody
     - https://w3c.github.io/webappsec-csp/#framework-violation
     - https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport
+    - https://web.dev/articles/csp
+    - https://web.dev/articles/reporting-api
 
     Browser Implementations:
     - Chromium (Blink):
@@ -126,7 +196,7 @@ pub enum ReportBody {
         - https://w3c.github.io/webappsec-csp/#enumdef-securitypolicyviolationeventdisposition
         - https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport#disposition
         */
-        disposition: SecurityPolicyViolationEventDisposition,
+        disposition: Disposition,
         /**
         Each violation has a status, which is a non-negative integer
         representing the HTTP status code of the resource for which the global
@@ -164,6 +234,8 @@ pub enum ReportBody {
     - https://wicg.github.io/deprecation-reporting/#deprecation-report
     - https://wicg.github.io/deprecation-reporting/#deprecationreportbody
     - https://developer.mozilla.org/en-US/docs/Web/API/DeprecationReport
+    - https://web.dev/articles/reportingobserver
+    - https://web.dev/articles/reporting-api
 
     Browser Implementations:
     - Chromium (Blink):
@@ -251,6 +323,39 @@ mod tests {
     use url::Url;
 
     #[test]
+    fn test_deserialize_connection_allowlist_report() {
+        let json = json!({
+            "type": "connection-allowlist",
+            "body": {
+                "url": "https://happen-land-comp-basically.trycloudflare.com/",
+                "connection": "https://www.gstatic.com/devrel-devsite/prod/v097103d8ccd7b257790809ea4cc5e5fee6daa6e24890a4af388296e58364bc31/chrome/images/lockup.svg",
+                "allowlist": ["https://happen-land-comp-basically.trycloudflare.com/*"],
+                "disposition": "report"
+            }
+        });
+
+        let report_body: ReportBody = serde_json::from_value(json).unwrap();
+        assert_eq!(
+            report_body,
+            ReportBody::ConnectionAllowlist {
+                url: Some(StrippedUrl::Url(
+                    Url::parse("https://happen-land-comp-basically.trycloudflare.com/").unwrap()
+                )),
+                connection: ConnectionAllowlistConnection::Url(StrippedUrl::Url(
+                    Url::parse(
+                        "https://www.gstatic.com/devrel-devsite/prod/v097103d8ccd7b257790809ea4cc5e5fee6daa6e24890a4af388296e58364bc31/chrome/images/lockup.svg"
+                    )
+                    .unwrap()
+                )),
+                allowlist: Some(vec![
+                    "https://happen-land-comp-basically.trycloudflare.com/*".to_string()
+                ]),
+                disposition: Disposition::Report,
+            }
+        );
+    }
+
+    #[test]
     fn test_deserialize_csp_violation_report() {
         let json = json!({
             "type": "csp-violation",
@@ -290,7 +395,7 @@ mod tests {
                     .unwrap()
                 )),
                 sample: Some("console.log('violation')".to_string()),
-                disposition: SecurityPolicyViolationEventDisposition::Enforce,
+                disposition: Disposition::Enforce,
                 status_code: 200,
                 line_number: Some(3),
                 column_number: Some(1),

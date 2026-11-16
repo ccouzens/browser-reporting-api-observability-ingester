@@ -13,6 +13,8 @@ deliver to a specified endpoint.
 - https://w3c.github.io/reporting/#serialize-reports
 - https://www.w3.org/TR/reporting-1/#serialize-reports
 - https://developer.mozilla.org/en-US/docs/Web/API/Report
+- https://web.dev/articles/reporting-api
+- https://web.dev/articles/reportingobserver
 */
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Report {

@@ -18,6 +18,8 @@ used as the blocked URI field for violation reports:
 - https://w3c.github.io/webappsec-csp/#obtain-violation-blocked-uri
 - https://w3c.github.io/webappsec-csp/#dom-cspviolationreportbody-blockedurl
 - https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport#blockedurl
+- https://web.dev/articles/csp
+- https://web.dev/articles/trusted-types
 */
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]

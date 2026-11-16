@@ -11,6 +11,7 @@ representing the directive whose enforcement caused the violation.
 - https://w3c.github.io/webappsec-csp/#dom-cspviolationreportbody-effectivedirective
 - https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport#effectivedirective
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy#directives
+- https://web.dev/articles/csp
 */
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
