@@ -14,5 +14,4 @@ serde_with = "3.24.0"
 thiserror = "2.0.21"
 tokio = { version = "1.53.3", features = ["macros", "net", "rt-multi-thread"] }
 url = { version = "2.5.8", features = ["serde"] }
-urlpattern = "0.6.0"
 walkdir = "2.5.0"

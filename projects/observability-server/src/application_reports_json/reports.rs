@@ -30,17 +30,14 @@ mod tests {
         {
             let file_name = entry.file_name().to_string_lossy();
             if file_name.ends_with(".json") {
-                println!(
-                    "{}",
-                    serde_json::to_string_pretty(
-                        &serde_json::from_reader::<_, ExampleReport>(BufReader::new(
-                            File::open(entry.path()).unwrap()
-                        ))
-                        .unwrap()
-                        .body
-                    )
-                    .unwrap()
-                );
+                let parsed_body = &serde_json::from_reader::<_, ExampleReport>(BufReader::new(
+                    File::open(entry.path()).unwrap(),
+                ))
+                .unwrap()
+                .body;
+                println!("{:#?}", parsed_body);
+
+                println!("{}", serde_json::to_string_pretty(parsed_body).unwrap());
             }
         }
     }
