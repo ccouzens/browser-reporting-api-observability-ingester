@@ -1,7 +1,7 @@
 use super::{
     BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, HttpMethod,
     NetworkErrorPhase, NetworkErrorProtocol, NetworkErrorType, PermissionsPolicyFeature,
-    StrippedUrl,
+    RequestDestination, StrippedUrl,
 };
 use serde::{Deserialize, Deserializer, Serialize, de::IntoDeserializer};
 use std::net::IpAddr;
@@ -314,6 +314,72 @@ pub enum ReportBody {
         - <https://developer.mozilla.org/en-US/docs/Web/API/DeprecationReport#columnnumber>
         */
         column_number: Option<u32>,
+    },
+    /**
+    Integrity Policy Violation Reports
+
+    Integrity violation reports indicate that a document attempted to load a
+    resource that violated an active (`Integrity-Policy`) or report-only
+    (`Integrity-Policy-Report-Only`) Integrity Policy.
+
+    Specifications & Documentation:
+    - <https://w3c.github.io/webappsec-subresource-integrity/#report-violations>
+    - <https://w3c.github.io/webappsec-subresource-integrity/#dictdef-integrityviolationreportbody>
+    - <https://developer.mozilla.org/en-US/docs/Web/API/IntegrityViolationReport>
+    - <https://web.dev/articles/reporting-api>
+
+    Browser Implementations:
+    - Chromium (Blink):
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/integrity_violation_report_body.idl>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/integrity_violation_report_body.h>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/integrity_violation_report_body.cc>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/integrity_policy.cc>
+    - Gecko (Firefox):
+      - <https://github.com/mozilla-firefox/firefox/blob/5866b3015de8fc803012d8ab800d8c38df1ea5e8/dom/webidl/Reporting.webidl>
+      - <https://github.com/mozilla-firefox/firefox/blob/5866b3015de8fc803012d8ab800d8c38df1ea5e8/dom/reporting/IntegrityViolationReportBody.h>
+      - <https://github.com/mozilla-firefox/firefox/blob/5866b3015de8fc803012d8ab800d8c38df1ea5e8/dom/reporting/IntegrityViolationReportBody.cpp>
+    - WebKit (Safari):
+      - <https://github.com/WebKit/WebKit/blob/2ea5b33be7f0ffde238363fa949ca0eb33aa3565/Source/WebCore/Modules/reporting/IntegrityPolicyViolationReportBody.h>
+      - <https://github.com/WebKit/WebKit/blob/2ea5b33be7f0ffde238363fa949ca0eb33aa3565/Source/WebCore/Modules/reporting/IntegrityPolicyViolationReportBody.cpp>
+    */
+    IntegrityViolation {
+        /**
+        The result of strip URL for use in reports on the global's associated
+        Document's URL (for a Window) or the global's URL (for a
+        WorkerGlobalScope).
+
+        - <https://w3c.github.io/webappsec-subresource-integrity/#dom-integrityviolationreportbody-documenturl>
+        - <https://w3c.github.io/webappsec-subresource-integrity/#report-violations>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/IntegrityViolationReport#documenturl>
+        */
+        #[serde(rename = "documentURL")]
+        document_url: StrippedUrl,
+        /**
+        The result of strip URL for use in reports on request's URL.
+
+        - <https://w3c.github.io/webappsec-subresource-integrity/#dom-integrityviolationreportbody-blockedurl>
+        - <https://w3c.github.io/webappsec-subresource-integrity/#report-violations>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/IntegrityViolationReport#blockedurl>
+        */
+        #[serde(rename = "blockedURL")]
+        blocked_url: Option<StrippedUrl>,
+        /**
+        The request's destination.
+
+        - <https://w3c.github.io/webappsec-subresource-integrity/#dom-integrityviolationreportbody-destination>
+        - <https://w3c.github.io/webappsec-subresource-integrity/#report-violations>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/IntegrityViolationReport#destination>
+        */
+        destination: Option<RequestDestination>,
+        /**
+        `false` if the policy was enforced (`Integrity-Policy`), or `true` if
+        the violation was only reported (`Integrity-Policy-Report-Only`).
+
+        - <https://w3c.github.io/webappsec-subresource-integrity/#dom-integrityviolationreportbody-reportonly>
+        - <https://w3c.github.io/webappsec-subresource-integrity/#report-violations>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/IntegrityViolationReport#reportonly>
+        */
+        report_only: bool,
     },
     /**
     Network Error Logging Reports
@@ -708,6 +774,37 @@ mod tests {
                     "Permissions policy violation: geolocation is not allowed in this document."
                         .to_string()
                 ),
+            }
+        );
+    }
+
+    #[test]
+    fn test_deserialize_integrity_violation_report() {
+        let json = json!({
+            "type": "integrity-violation",
+            "body": {
+                "documentURL": "https://swing-sega-logs-hero.trycloudflare.com/",
+                "blockedURL": "https://swing-sega-logs-hero.trycloudflare.com/assets/index-BENx6feT.js",
+                "destination": "script",
+                "reportOnly": true
+            }
+        });
+
+        let report_body: ReportBody = serde_json::from_value(json).unwrap();
+        assert_eq!(
+            report_body,
+            ReportBody::IntegrityViolation {
+                document_url: StrippedUrl::Url(
+                    Url::parse("https://swing-sega-logs-hero.trycloudflare.com/").unwrap()
+                ),
+                blocked_url: Some(StrippedUrl::Url(
+                    Url::parse(
+                        "https://swing-sega-logs-hero.trycloudflare.com/assets/index-BENx6feT.js"
+                    )
+                    .unwrap()
+                )),
+                destination: Some(RequestDestination::Script),
+                report_only: true,
             }
         );
     }

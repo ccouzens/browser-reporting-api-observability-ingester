@@ -10,6 +10,7 @@ mod permissions_policy_feature;
 mod report;
 mod report_body;
 mod reports;
+mod request_destination;
 mod stripped_url;
 
 pub use blocked_url::BlockedUrl;
@@ -24,4 +25,5 @@ pub use permissions_policy_feature::PermissionsPolicyFeature;
 pub use report::Report;
 pub use report_body::ReportBody;
 pub use reports::Reports;
+pub use request_destination::RequestDestination;
 pub use stripped_url::StrippedUrl;
