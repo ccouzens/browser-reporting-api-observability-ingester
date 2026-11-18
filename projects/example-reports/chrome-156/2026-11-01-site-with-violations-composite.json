@@ -71,6 +71,74 @@
 			"type": "deprecation",
 			"url": "https://happen-land-comp-basically.trycloudflare.com/",
 			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+		},
+		{
+			"age": 37447,
+			"body": {
+				"elapsed_time": 277,
+				"method": "GET",
+				"phase": "application",
+				"protocol": "h2",
+				"referrer": "",
+				"sampling_fraction": 1,
+				"server_ip": "104.16.231.132",
+				"status_code": 200,
+				"type": "ok"
+			},
+			"type": "network-error",
+			"url": "https://brunswick-front-manufacturer-youth.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		},
+		{
+			"age": 37256,
+			"body": {
+				"elapsed_time": 181,
+				"method": "GET",
+				"phase": "application",
+				"protocol": "h2",
+				"referrer": "https://brunswick-front-manufacturer-youth.trycloudflare.com/",
+				"sampling_fraction": 1,
+				"server_ip": "104.16.231.132",
+				"status_code": 200,
+				"type": "ok"
+			},
+			"type": "network-error",
+			"url": "https://brunswick-front-manufacturer-youth.trycloudflare.com/assets/index-BENx6feT.js",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		},
+		{
+			"age": 37138,
+			"body": {
+				"elapsed_time": 106,
+				"method": "GET",
+				"phase": "application",
+				"protocol": "h2",
+				"referrer": "https://brunswick-front-manufacturer-youth.trycloudflare.com/",
+				"sampling_fraction": 1,
+				"server_ip": "104.16.231.132",
+				"status_code": 404,
+				"type": "http.error"
+			},
+			"type": "network-error",
+			"url": "https://brunswick-front-manufacturer-youth.trycloudflare.com/favicon.ico",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		},
+		{
+			"age": 37143,
+			"body": {
+				"elapsed_time": 103,
+				"method": "GET",
+				"phase": "application",
+				"protocol": "h2",
+				"referrer": "",
+				"sampling_fraction": 1,
+				"server_ip": "104.16.231.132",
+				"status_code": 200,
+				"type": "ok"
+			},
+			"type": "network-error",
+			"url": "https://brunswick-front-manufacturer-youth.trycloudflare.com/assets/index-BENx6feT.js.map",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
 		}
 	],
 	"headersDistinct": {
