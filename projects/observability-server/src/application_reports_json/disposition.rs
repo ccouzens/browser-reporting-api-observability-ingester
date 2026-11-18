@@ -26,27 +26,38 @@ Connection Allowlists:
 - <https://wicg.github.io/connection-allowlists/#enumdef-connectionallowlistdisposition>
 - <https://wicg.github.io/connection-allowlists/#dom-connectionallowlistviolationreport-disposition>
 - <https://developer.chrome.com/blog/connection-allowlists>
+
+Permissions Policy:
+- A string indicating whether the violated permissions policy was enforced in
+  this case. disposition will be set to "enforce" if the policy was enforced, or
+  "report" if the violation resulted only in this report being generated.
+- <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-disposition>
+- <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#disposition>
 */
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Disposition {
     /**
-    The policy was enforced (for example, set via the `Content-Security-Policy`
-    or `Connection-Allowlist` header).
+    The policy was enforced (for example, set via the `Content-Security-Policy`,
+    `Connection-Allowlist`, or `Permissions-Policy` header).
 
     - <https://w3c.github.io/webappsec-csp/#dom-securitypolicyviolationeventdisposition-enforce>
     - <https://wicg.github.io/connection-allowlists/#dom-connectionallowlistdisposition-enforce>
+    - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-disposition>
     - <https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport#disposition>
+    - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#disposition>
     */
     Enforce,
     /**
     The policy was report-only (for example, set via the
-    `Content-Security-Policy-Report-Only` or `Connection-Allowlist-Report-Only`
-    header).
+    `Content-Security-Policy-Report-Only`, `Connection-Allowlist-Report-Only`,
+    or `Permissions-Policy-Report-Only` header).
 
     - <https://w3c.github.io/webappsec-csp/#dom-securitypolicyviolationeventdisposition-report>
     - <https://wicg.github.io/connection-allowlists/#dom-connectionallowlistdisposition-report>
+    - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-disposition>
     - <https://developer.mozilla.org/en-US/docs/Web/API/CSPViolationReport#disposition>
+    - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#disposition>
     */
     Report,
 }

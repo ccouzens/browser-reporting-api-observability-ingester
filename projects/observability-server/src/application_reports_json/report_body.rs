@@ -1,4 +1,7 @@
-use super::{BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, StrippedUrl};
+use super::{
+    BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, PermissionsPolicyFeature,
+    StrippedUrl,
+};
 use serde::{Deserialize, Deserializer, Serialize, de::IntoDeserializer};
 
 fn empty_string_as_none<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
@@ -310,6 +313,97 @@ pub enum ReportBody {
         */
         column_number: Option<u32>,
     },
+    /**
+    Permissions Policy Violation Reports
+
+    Permissions policy violation reports indicate that some behavior of the
+    Document has violated a permissions policy.
+
+    Specifications & Documentation:
+    - <https://w3c.github.io/webappsec-permissions-policy/#reporting>
+    - <https://w3c.github.io/webappsec-permissions-policy/#permissionspolicyviolationreportbody>
+    - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport>
+    - <https://web.dev/articles/reporting-api>
+
+    Browser Implementations:
+    - Chromium (Blink):
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/permissions_policy_violation_report_body.idl>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/permissions_policy_violation_report_body.h>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/permissions_policy_violation_report_body.cc>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/location_report_body.h>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/location_report_body.cc>
+    - Gecko (Firefox): Not implemented
+    - WebKit (Safari): Not implemented
+    */
+    PermissionsPolicyViolation {
+        /**
+        The string identifying the policy-controlled feature whose policy has
+        been violated. This string can be used for grouping and counting
+        related reports.
+
+        - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-featureid>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#featureid>
+        */
+        #[serde(alias = "policyId")]
+        feature_id: PermissionsPolicyFeature,
+        /**
+        If known, the file where the violation occured, or null otherwise.
+
+        - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-sourcefile>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#sourcefile>
+        */
+        source_file: Option<StrippedUrl>,
+        /**
+        If known, the line number in sourceFile where the violation occured, or
+        null otherwise.
+
+        - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-linenumber>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#linenumber>
+        */
+        line_number: Option<u32>,
+        /**
+        If known, the column number in sourceFile where the violation occured,
+        or null otherwise.
+
+        - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-columnnumber>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#columnnumber>
+        */
+        column_number: Option<u32>,
+        /**
+        A string indicating whether the violated permissions policy was enforced
+        in this case. disposition will be set to "enforce" if the policy was
+        enforced, or "report" if the violation resulted only in this report
+        being generated (with no further action taken by the user agent in
+        response to the violation).
+
+        - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-disposition>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#disposition>
+        */
+        disposition: Disposition,
+        /**
+        For reports of potential violations, which can be attributed to a
+        specific <iframe> element, the value of the allow attribute of that
+        element, or omitted otherwise.
+
+        - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-allowattribute>
+        */
+        allow_attribute: Option<String>,
+        /**
+        For reports of potential violations, which can be attributed to a
+        specific <iframe> element, the value of the src attribute of that
+        element, or omitted otherwise.
+
+        - <https://w3c.github.io/webappsec-permissions-policy/#dom-permissionspolicyviolationreportbody-srcattribute>
+        */
+        src_attribute: Option<String>,
+        /**
+        A string containing a human-readable description of the violation
+        (Blink extension, not in the W3C specification).
+
+        - <https://developer.mozilla.org/en-US/docs/Web/API/PermissionsPolicyViolationReport#message>
+        */
+        message: Option<String>,
+    },
     #[serde(untagged)]
     UnknownViolation {
         r#type: String,
@@ -434,6 +528,46 @@ mod tests {
                 )),
                 line_number: Some(10),
                 column_number: Some(1),
+            }
+        );
+    }
+
+    #[test]
+    fn test_deserialize_permissions_policy_violation_report() {
+        let json = json!({
+            "type": "permissions-policy-violation",
+            "body": {
+                "featureId": "geolocation",
+                "sourceFile": "https://happen-land-comp-basically.trycloudflare.com/assets/index-BIAicTOC.js",
+                "lineNumber": 44,
+                "columnNumber": 29,
+                "disposition": "enforce",
+                "allowAttribute": "geolocation 'none'",
+                "srcAttribute": "https://example.com/embed.html",
+                "message": "Permissions policy violation: geolocation is not allowed in this document."
+            }
+        });
+
+        let report_body: ReportBody = serde_json::from_value(json).unwrap();
+        assert_eq!(
+            report_body,
+            ReportBody::PermissionsPolicyViolation {
+                feature_id: PermissionsPolicyFeature::Geolocation,
+                source_file: Some(StrippedUrl::Url(
+                    Url::parse(
+                        "https://happen-land-comp-basically.trycloudflare.com/assets/index-BIAicTOC.js"
+                    )
+                    .unwrap()
+                )),
+                line_number: Some(44),
+                column_number: Some(29),
+                disposition: Disposition::Enforce,
+                allow_attribute: Some("geolocation 'none'".to_string()),
+                src_attribute: Some("https://example.com/embed.html".to_string()),
+                message: Some(
+                    "Permissions policy violation: geolocation is not allowed in this document."
+                        .to_string()
+                ),
             }
         );
     }
