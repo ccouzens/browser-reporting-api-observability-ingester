@@ -6,6 +6,9 @@ Endpoint to ingest content-security-policy violation reports, crash reports and
 deprecation reports into observability systems by producing metric counters and
 structured JSON logged to std-out.
 
+<details>
+<summary>Goal</summary>
+
 There is a ready to use docker image. However to best monitor your website, we
 encourage you to fork and customize the metric labels and JSON output with
 details relevant to monitoring your site.
@@ -130,3 +133,5 @@ the client to connect to the reporting endpoint
 
 `document_url_href`: the whole of the url of the document content that the
 browser was on when the report was generated.
+
+</details>
