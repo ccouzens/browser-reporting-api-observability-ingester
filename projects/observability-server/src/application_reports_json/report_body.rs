@@ -1,4 +1,6 @@
-use super::{BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, StrippedUrl};
+use super::{
+    BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, StrippedUrl, UrlPattern,
+};
 use serde::{Deserialize, Deserializer, Serialize, de::IntoDeserializer};
 
 fn empty_string_as_none<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
@@ -76,8 +78,9 @@ pub enum ReportBody {
         - <https://wicg.github.io/connection-allowlists/#dom-connectionallowlistviolationreport-allowlist>
         - <https://wicg.github.io/connection-allowlists/#connection-allowlists>
         - <https://wicg.github.io/connection-allowlists/#reporting>
+        - <https://urlpattern.spec.whatwg.org/>
         */
-        allowlist: Option<Vec<String>>,
+        allowlist: Option<Vec<UrlPattern>>,
         /**
         ConnectionAllowlistViolationReport’s disposition is the allowlist’s
         disposition.
@@ -348,7 +351,8 @@ mod tests {
                     .unwrap()
                 )),
                 allowlist: Some(vec![
-                    "https://happen-land-comp-basically.trycloudflare.com/*".to_string()
+                    UrlPattern::parse("https://happen-land-comp-basically.trycloudflare.com/*")
+                        .unwrap(),
                 ]),
                 disposition: Disposition::Report,
             }
