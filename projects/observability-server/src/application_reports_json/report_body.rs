@@ -376,7 +376,11 @@ pub enum ReportBody {
         - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
         - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
         */
-        #[serde(rename = "server_ip", default, deserialize_with = "empty_string_as_none")]
+        #[serde(
+            rename = "server_ip",
+            default,
+            deserialize_with = "empty_string_as_none"
+        )]
         server_ip: Option<IpAddr>,
         /**
         The network protocol used to fetch the resource as identified by the

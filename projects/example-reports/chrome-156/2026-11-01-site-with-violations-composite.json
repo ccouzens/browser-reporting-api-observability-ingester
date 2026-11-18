@@ -139,6 +139,18 @@
 			"type": "network-error",
 			"url": "https://brunswick-front-manufacturer-youth.trycloudflare.com/assets/index-BENx6feT.js.map",
 			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		},
+		{
+			"age": 59969,
+			"body": {
+				"blockedURL": "https://swing-sega-logs-hero.trycloudflare.com/assets/index-BENx6feT.js",
+				"destination": "script",
+				"documentURL": "https://swing-sega-logs-hero.trycloudflare.com/",
+				"reportOnly": true
+			},
+			"type": "integrity-violation",
+			"url": "https://swing-sega-logs-hero.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
 		}
 	],
 	"headersDistinct": {

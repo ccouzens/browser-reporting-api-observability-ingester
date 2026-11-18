@@ -16,6 +16,8 @@ export default defineConfig({
 				"(response-origin); report-to=default",
 			"Content-Security-Policy":
 				"img-src 'self' https://www.gstatic.com; report-to default",
+			"Integrity-Policy-Report-Only":
+				"blocked-destinations=(script style), endpoints=(default)",
 			NEL: JSON.stringify({
 				report_to: "nel",
 				max_age: 600,
