@@ -1,8 +1,10 @@
 use super::{
-    BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, PermissionsPolicyFeature,
+    BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, HttpMethod,
+    NetworkErrorPhase, NetworkErrorProtocol, NetworkErrorType, PermissionsPolicyFeature,
     StrippedUrl,
 };
 use serde::{Deserialize, Deserializer, Serialize, de::IntoDeserializer};
+use std::net::IpAddr;
 
 fn empty_string_as_none<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
 where
@@ -16,7 +18,7 @@ where
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Debug, PartialEq, Deserialize, Serialize)]
 #[serde(
     tag = "type",
     content = "body",
@@ -314,6 +316,103 @@ pub enum ReportBody {
         column_number: Option<u32>,
     },
     /**
+    Network Error Logging Reports
+
+    Network error reports indicate that a network request failed (or succeeded,
+    when `success_fraction` is configured) under an active Network Error
+    Logging (NEL) policy.
+
+    Specifications & Documentation:
+    - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+    - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging>
+
+    Browser Implementations:
+    - Chromium (Blink / net):
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/net/network_error_logging/network_error_logging_service.cc>
+    - Gecko (Firefox): Not implemented
+    - WebKit (Safari): Not implemented
+    */
+    NetworkError {
+        /**
+        The sampling rate applied to this request.
+
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        #[serde(rename = "sampling_fraction")]
+        sampling_fraction: f64,
+        /**
+        The elapsed number of milliseconds between the start of the resource
+        fetch and when it was completed or aborted by the user agent.
+
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        #[serde(rename = "elapsed_time")]
+        elapsed_time: Option<u64>,
+        /**
+        If request failed, the phase of its network error. If request
+        succeeded, "application".
+
+        - <https://w3c.github.io/network-error-logging/#dfn-type-phase>
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        phase: NetworkErrorPhase,
+        /**
+        If request failed, the type of its network error. If request succeeded,
+        "ok".
+
+        - <https://w3c.github.io/network-error-logging/#dfn-types>
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        #[serde(rename = "type")]
+        r#type: NetworkErrorType,
+        /**
+        The IP address of the server to which the user agent sent the request,
+        if available.
+
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        #[serde(rename = "server_ip", default, deserialize_with = "empty_string_as_none")]
+        server_ip: Option<IpAddr>,
+        /**
+        The network protocol used to fetch the resource as identified by the
+        ALPN Protocol ID, if available.
+
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        #[serde(default, deserialize_with = "empty_string_as_none")]
+        protocol: Option<NetworkErrorProtocol>,
+        /**
+        request's referrer, as determined by the referrer policy associated with
+        its client.
+
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        #[serde(default, deserialize_with = "empty_string_as_none")]
+        referrer: Option<StrippedUrl>,
+        /**
+        request's request method.
+
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        method: Option<HttpMethod>,
+        /**
+        The status code of the HTTP response, if available. Otherwise, 0.
+
+        - <https://w3c.github.io/network-error-logging/#generate-a-network-error-report>
+        - <https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Network_Error_Logging#error_reports>
+        */
+        #[serde(rename = "status_code")]
+        status_code: Option<u16>,
+    },
+    /**
     Permissions Policy Violation Reports
 
     Permissions policy violation reports indicate that some behavior of the
@@ -528,6 +627,43 @@ mod tests {
                 )),
                 line_number: Some(10),
                 column_number: Some(1),
+            }
+        );
+    }
+
+    #[test]
+    fn test_deserialize_network_error_report() {
+        let json = json!({
+            "type": "network-error",
+            "body": {
+                "sampling_fraction": 1.0,
+                "elapsed_time": 106,
+                "phase": "application",
+                "type": "http.error",
+                "server_ip": "104.16.231.132",
+                "protocol": "h2",
+                "referrer": "https://brunswick-front-manufacturer-youth.trycloudflare.com/",
+                "method": "GET",
+                "status_code": 404
+            }
+        });
+
+        let report_body: ReportBody = serde_json::from_value(json).unwrap();
+        assert_eq!(
+            report_body,
+            ReportBody::NetworkError {
+                sampling_fraction: 1.0,
+                elapsed_time: Some(106),
+                phase: NetworkErrorPhase::Application,
+                r#type: NetworkErrorType::HttpError,
+                server_ip: Some("104.16.231.132".parse().unwrap()),
+                protocol: Some(NetworkErrorProtocol::H2),
+                referrer: Some(StrippedUrl::Url(
+                    Url::parse("https://brunswick-front-manufacturer-youth.trycloudflare.com/")
+                        .unwrap()
+                )),
+                method: Some(HttpMethod::Get),
+                status_code: Some(404),
             }
         );
     }
