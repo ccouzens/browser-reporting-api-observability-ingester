@@ -472,6 +472,81 @@ pub enum ReportBody {
         report_only: bool,
     },
     /**
+    Intervention Reports
+
+    Intervention reports indicate that a user agent has decided not to honor a
+    request made by the application (e.g. for security, performance or user
+    annoyance reasons).
+
+    Specifications & Documentation:
+    - <https://wicg.github.io/intervention-reporting/#intervention-report>
+    - <https://wicg.github.io/intervention-reporting/#interventionreportbody>
+    - <https://developer.mozilla.org/en-US/docs/Web/API/InterventionReport>
+    - <https://web.dev/articles/reportingobserver>
+    - <https://web.dev/articles/reporting-api>
+
+    Browser Implementations:
+    - Chromium (Blink):
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/intervention_report_body.idl>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/intervention_report_body.h>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/intervention_report_body.cc>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/intervention.cc>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/location_report_body.h>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/location_report_body.cc>
+    - Gecko (Firefox): Not implemented
+    - WebKit (Safari): Not implemented
+    */
+    Intervention {
+        /**
+        an implementation-defined string identifying the specific intervention
+        that occurred. This string can be used for grouping and counting
+        related reports.
+
+        - <https://wicg.github.io/intervention-reporting/#dom-interventionreportbody-id>
+        - <https://wicg.github.io/intervention-reporting/#interventionreportbody-id>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/InterventionReport#id>
+        */
+        id: String,
+        /**
+        A human-readable string with details typically matching what would be
+        displayed on the developer console. The message is not guaranteed to be
+        unique for a given id (e.g. it may contain additional context on what
+        led to the intervention).
+
+        - <https://wicg.github.io/intervention-reporting/#dom-interventionreportbody-message>
+        - <https://wicg.github.io/intervention-reporting/#interventionreportbody-message>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/InterventionReport#message>
+        */
+        message: String,
+        /**
+        If known, the file which first used the indicated API, or null
+        otherwise.
+
+        - <https://wicg.github.io/intervention-reporting/#dom-interventionreportbody-sourcefile>
+        - <https://wicg.github.io/intervention-reporting/#interventionreportbody-sourcefile>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/InterventionReport#sourcefile>
+        */
+        source_file: Option<StrippedUrl>,
+        /**
+        If known, the line number in sourceFile of the offending behavior
+        (which prompted the intervention), or null otherwise.
+
+        - <https://wicg.github.io/intervention-reporting/#dom-interventionreportbody-linenumber>
+        - <https://wicg.github.io/intervention-reporting/#interventionreportbody-linenumber>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/InterventionReport#linenumber>
+        */
+        line_number: Option<u32>,
+        /**
+        If known, the column number in sourceFile of the offending behavior
+        (which prompted the intervention), or null otherwise.
+
+        - <https://wicg.github.io/intervention-reporting/#dom-interventionreportbody-columnnumber>
+        - <https://wicg.github.io/intervention-reporting/#interventionreportbody-columnnumber>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/InterventionReport#columnnumber>
+        */
+        column_number: Option<u32>,
+    },
+    /**
     Network Error Logging Reports
 
     Network error reports indicate that a network request failed (or succeeded,
@@ -822,6 +897,38 @@ mod tests {
                 )),
                 line_number: Some(10),
                 column_number: Some(1),
+            }
+        );
+    }
+
+    #[test]
+    fn test_deserialize_intervention_report() {
+        let json = json!({
+            "type": "intervention",
+            "body": {
+                "id": "NavigatorVibrate",
+                "message": "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+                "sourceFile": "https://vote-obtaining-ranking-crops.trycloudflare.com/assets/index-CE9nXpMU.js",
+                "lineNumber": 17,
+                "columnNumber": 11
+            }
+        });
+
+        let report_body: ReportBody = serde_json::from_value(json).unwrap();
+        assert_eq!(
+            report_body,
+            ReportBody::Intervention {
+                id: "NavigatorVibrate".to_string(),
+                message: "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216."
+                    .to_string(),
+                source_file: Some(StrippedUrl::Url(
+                    Url::parse(
+                        "https://vote-obtaining-ranking-crops.trycloudflare.com/assets/index-CE9nXpMU.js"
+                    )
+                    .unwrap()
+                )),
+                line_number: Some(17),
+                column_number: Some(11),
             }
         );
     }
