@@ -164,6 +164,19 @@
 			"type": "crash",
 			"url": "https://vote-perfect-defining-vocational.trycloudflare.com/",
 			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		},
+		{
+			"age": 59906,
+			"body": {
+				"columnNumber": 11,
+				"id": "NavigatorVibrate",
+				"lineNumber": 17,
+				"message": "Blocked call to navigator.vibrate because user hasn't tapped on the frame or any embedded frame yet: https://www.chromestatus.com/feature/5644273861001216.",
+				"sourceFile": "https://vote-obtaining-ranking-crops.trycloudflare.com/assets/index-CE9nXpMU.js"
+			},
+			"type": "intervention",
+			"url": "https://vote-obtaining-ranking-crops.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Mobile Safari/537.36"
 		}
 	],
 	"headersDistinct": {

@@ -21,3 +21,5 @@ addEventListener("click", (event) => {
 		while (true) {}
 	}
 });
+
+navigator.vibrate(100);
