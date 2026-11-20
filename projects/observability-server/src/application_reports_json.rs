@@ -1,7 +1,9 @@
 mod blocked_url;
 mod connection_allowlist_connection;
+mod crash_reason;
 mod csp_directive;
 mod disposition;
+mod document_visibility_state;
 mod http_method;
 mod network_error_phase;
 mod network_error_protocol;
@@ -15,8 +17,10 @@ mod stripped_url;
 
 pub use blocked_url::BlockedUrl;
 pub use connection_allowlist_connection::ConnectionAllowlistConnection;
+pub use crash_reason::CrashReason;
 pub use csp_directive::CspDirective;
 pub use disposition::Disposition;
+pub use document_visibility_state::DocumentVisibilityState;
 pub use http_method::HttpMethod;
 pub use network_error_phase::NetworkErrorPhase;
 pub use network_error_protocol::NetworkErrorProtocol;

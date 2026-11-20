@@ -1,10 +1,10 @@
 use super::{
-    BlockedUrl, ConnectionAllowlistConnection, CspDirective, Disposition, HttpMethod,
-    NetworkErrorPhase, NetworkErrorProtocol, NetworkErrorType, PermissionsPolicyFeature,
-    RequestDestination, StrippedUrl,
+    BlockedUrl, ConnectionAllowlistConnection, CrashReason, CspDirective, Disposition,
+    DocumentVisibilityState, HttpMethod, NetworkErrorPhase, NetworkErrorProtocol, NetworkErrorType,
+    PermissionsPolicyFeature, RequestDestination, StrippedUrl,
 };
 use serde::{Deserialize, Deserializer, Serialize, de::IntoDeserializer};
-use std::net::IpAddr;
+use std::{collections::BTreeMap, net::IpAddr};
 
 fn empty_string_as_none<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
 where
@@ -94,6 +94,96 @@ pub enum ReportBody {
         - <https://wicg.github.io/connection-allowlists/#reporting>
         */
         disposition: Disposition,
+    },
+    /**
+    Crash Reports
+
+    Crash reports indicate that the user was unable to continue using the page
+    because the browser (or one of its processes necessary for the page)
+    crashed.
+
+    Specifications & Documentation:
+    - <https://wicg.github.io/crash-reporting/#crash-report>
+    - <https://wicg.github.io/crash-reporting/#dictdef-crashreportbody>
+    - <https://developer.mozilla.org/en-US/docs/Web/API/CrashReport>
+    - <https://web.dev/articles/reporting-api>
+
+    Browser Implementations:
+    - Chromium (Blink / content):
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/content/browser/renderer_host/render_frame_host_impl.cc>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/crash_report_context.idl>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/crash_report_context.h>
+      - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/third_party/blink/renderer/core/frame/crash_report_context.cc>
+    - Gecko (Firefox): Not implemented
+      - <https://github.com/mozilla/standards-positions/issues/288>
+      - <https://github.com/mozilla/standards-positions/issues/1271>
+    - WebKit (Safari): Not implemented
+      - <https://github.com/WebKit/standards-positions/issues/456>
+      - <https://github.com/WebKit/standards-positions/issues/528>
+    */
+    Crash {
+        /**
+        A more specific classification of the type of crash that occured, if
+        known, or omitted otherwise.
+
+        - <https://wicg.github.io/crash-reporting/#dom-crashreportbody-reason>
+        - <https://wicg.github.io/crash-reporting/#crashreportbody-reason>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/CrashReport#reason>
+        */
+        reason: Option<CrashReason>,
+        /**
+        The string representation of the JavaScript call stack at the time of
+        the crash, if all of the following are true, or omitted otherwise:
+        - The crash reason is "unresponsive".
+        - The policy value for include-js-call-stacks-in-crash-reports in the
+          Document which crashed is true.
+        - The call stack can be recovered from the crashed document.
+
+        The string representation used for stack is the same as that used by
+        the Error.prototype.stack property.
+
+        - <https://wicg.github.io/crash-reporting/#dom-crashreportbody-stack>
+        - <https://wicg.github.io/crash-reporting/#crashreportbody-stack>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/CrashReport#stack>
+        */
+        stack: Option<String>,
+        /**
+        A boolean representing whether the Document that crashed belonged to a
+        top-level traversable, or not.
+
+        - <https://wicg.github.io/crash-reporting/#dom-crashreportbody-is_top_level>
+        - <https://wicg.github.io/crash-reporting/#crashreportbody-is_top_level>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/CrashReport#is_top_level>
+        */
+        #[serde(rename = "is_top_level")]
+        is_top_level: Option<bool>,
+        /**
+        The string value "visible" or "hidden", matching the
+        DocumentVisibilityState enum that is exposed to the web platform, via
+        Document.visibilityState. It represents whether the visual viewport
+        that the crashed Document was hosted in was visible at all, or fully
+        occluded.
+
+        - <https://wicg.github.io/crash-reporting/#dom-crashreportbody-visibility_state>
+        - <https://wicg.github.io/crash-reporting/#crashreportbody-visibility_state>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/CrashReport#visibility_state>
+        */
+        #[serde(rename = "visibility_state")]
+        visibility_state: Option<DocumentVisibilityState>,
+        /**
+        A JSON dictionary of arbitrary key/value data obtained by deserializing
+        the memory buffer in user agent’s crash report buffers map, identified
+        by a crashing Document’s CrashReportContext’s backing buffer ID member.
+        This buffer is deserialized as a JSON-formatted string, and its keys
+        and values are appended to this any object member of the
+        CrashReportBody.
+
+        - <https://wicg.github.io/crash-reporting/#dom-crashreportbody-crash_report_api>
+        - <https://wicg.github.io/crash-reporting/#crashreportbody-crash_report_api>
+        - <https://developer.mozilla.org/en-US/docs/Web/API/CrashReport#crash_report_api>
+        */
+        #[serde(rename = "crash_report_api")]
+        crash_report_api: Option<BTreeMap<String, String>>,
     },
     /**
     Content Security Policy Violation Reports
@@ -616,6 +706,41 @@ mod tests {
                         .to_string(),
                 ]),
                 disposition: Disposition::Report,
+            }
+        );
+    }
+
+    #[test]
+    fn test_deserialize_crash_report() {
+        let json = json!({
+            "type": "crash",
+            "body": {
+                "reason": "unresponsive",
+                "stack": "Website owner has not opted in for JS call stacks in crash reports.",
+                "is_top_level": true,
+                "visibility_state": "visible",
+                "crash_report_api": {
+                    "crash_data_1": "0001",
+                    "crash_data_2": "0002"
+                }
+            }
+        });
+
+        let report_body: ReportBody = serde_json::from_value(json).unwrap();
+        assert_eq!(
+            report_body,
+            ReportBody::Crash {
+                reason: Some(CrashReason::Unresponsive),
+                stack: Some(
+                    "Website owner has not opted in for JS call stacks in crash reports."
+                        .to_string()
+                ),
+                is_top_level: Some(true),
+                visibility_state: Some(DocumentVisibilityState::Visible),
+                crash_report_api: Some(BTreeMap::from([
+                    ("crash_data_1".to_string(), "0001".to_string()),
+                    ("crash_data_2".to_string(), "0002".to_string()),
+                ])),
             }
         );
     }
