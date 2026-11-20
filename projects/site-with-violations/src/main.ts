@@ -14,3 +14,10 @@ document.body.appendChild(blobImage);
 addEventListener("unload", (event) => {
 	console.log("unload", event);
 });
+
+addEventListener("click", (event) => {
+	const target = event.target;
+	if (target instanceof HTMLButtonElement && target.id === "unresponsive") {
+		while (true) {}
+	}
+});

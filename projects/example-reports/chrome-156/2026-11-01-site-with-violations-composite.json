@@ -151,6 +151,19 @@
 			"type": "integrity-violation",
 			"url": "https://swing-sega-logs-hero.trycloudflare.com/",
 			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+		},
+		{
+			"age": 17,
+			"body": {
+				"crash_report_api": {},
+				"is_top_level": true,
+				"reason": "unresponsive",
+				"stack": "Website owner has not opted in for JS call stacks in crash reports.",
+				"visibility_state": "visible"
+			},
+			"type": "crash",
+			"url": "https://vote-perfect-defining-vocational.trycloudflare.com/",
+			"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
 		}
 	],
 	"headersDistinct": {
