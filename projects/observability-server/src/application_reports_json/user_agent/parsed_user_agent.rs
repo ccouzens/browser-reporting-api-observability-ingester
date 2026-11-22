@@ -115,7 +115,7 @@ impl<'a> ParsedUserAgent<'a> {
                     }
                 }
                 UaToken::NameSepNumber { name, number } => match name {
-                    "Mozilla" | "Gecko" => {}
+                    "Mozilla" | "Gecko" | "FBNV" | "NW" => {}
                     "AppleWebKit" => has_apple_webkit = true,
                     "Mobile" => is_mobile = true,
                     "Version" => version = parse_version(number),
