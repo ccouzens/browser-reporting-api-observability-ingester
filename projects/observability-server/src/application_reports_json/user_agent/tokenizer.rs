@@ -23,7 +23,9 @@ impl<'a> Iterator for Tokenizer<'a> {
     type Item = UaToken<'a>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.rest = self.rest.trim_start();
+        self.rest = self
+            .rest
+            .trim_start_matches(|c: char| c.is_whitespace() || c == ';');
         if self.rest.is_empty() {
             return None;
         }
@@ -99,7 +101,7 @@ fn split_round_brackets(after_open: &str) -> (&str, &str) {
 }
 
 fn split_word(s: &str) -> (&str, &str) {
-    let end = s.find([' ', '\t', '(', '[']).unwrap_or(s.len());
+    let end = s.find([' ', '\t', ';', '(', '[']).unwrap_or(s.len());
     s.split_at(end)
 }
 
@@ -255,6 +257,32 @@ mod tests {
                     number: "1.0",
                 },
                 UaToken::RoundBrackets("comment"),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_tokenize_semicolon_separated_tokens() {
+        let ua =
+            "Safari/604.1 [FBAN/FBIOS;FBAV/588.1.0.66.71];FBNV/1; compatible; OAI-SearchBot/1.4;";
+        let tokens: Vec<_> = Tokenizer::new(ua).collect();
+        assert_eq!(
+            tokens,
+            vec![
+                UaToken::NameSepNumber {
+                    name: "Safari",
+                    number: "604.1",
+                },
+                UaToken::SquareBrackets("FBAN/FBIOS;FBAV/588.1.0.66.71"),
+                UaToken::NameSepNumber {
+                    name: "FBNV",
+                    number: "1",
+                },
+                UaToken::Other("compatible"),
+                UaToken::NameSepNumber {
+                    name: "OAI-SearchBot",
+                    number: "1.4",
+                },
             ]
         );
     }

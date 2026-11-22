@@ -145,7 +145,7 @@ impl<'a> ParsedUserAgent<'a> {
                     }
                 }
                 UaToken::NameSepNumber { name, number } => match name {
-                    "Mozilla" | "Gecko" | "FBNV" | "NW" => {}
+                    "Mozilla" | "Gecko" | "FBNV" | "NW" | "NV" => {}
                     "AppleWebKit" => has_apple_webkit = true,
                     "Mobile" => is_mobile = true,
                     "Version" => version = parse_version(number),
@@ -210,7 +210,7 @@ impl<'a> ParsedUserAgent<'a> {
                     "Mozilla" | "Gecko" | "AppleWebKit" | "Version" | "Safari" | "Chrome"
                     | "Firefox" | "like",
                 ) => {}
-                UaToken::Other("compatible" | "compatible;") => {
+                UaToken::Other("compatible") => {
                     is_bot = true;
                     match tokens.next() {
                         Some(UaToken::NameSepNumber { name, number }) => {
@@ -219,14 +219,11 @@ impl<'a> ParsedUserAgent<'a> {
                                 version: parse_version(number),
                             });
                         }
-                        Some(UaToken::Other(next)) => {
-                            let name = next.trim_end_matches(';');
-                            if !name.is_empty() {
-                                bot_browser = Some(Browser {
-                                    name,
-                                    version: None,
-                                });
-                            }
+                        Some(UaToken::Other(name)) => {
+                            bot_browser = Some(Browser {
+                                name,
+                                version: None,
+                            });
                         }
                         _ => {}
                     }
