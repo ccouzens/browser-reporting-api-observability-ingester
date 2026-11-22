@@ -194,13 +194,10 @@ impl<'a> ParsedUserAgent<'a> {
                     }
                 }
                 UaToken::Other("Mobile") => is_mobile = true,
-                UaToken::Other("Chrome-Lighthouse") => {
-                    is_bot = true;
-                    bot_browser = Some(Browser {
-                        name: "Chrome-Lighthouse",
-                        version: None,
-                    });
-                }
+                UaToken::Other(
+                    "Mozilla" | "Gecko" | "AppleWebKit" | "Version" | "Safari" | "Chrome"
+                    | "Firefox" | "like",
+                ) => {}
                 UaToken::Other("compatible" | "compatible;") => {
                     is_bot = true;
                     match tokens.next() {
@@ -222,7 +219,21 @@ impl<'a> ParsedUserAgent<'a> {
                         _ => {}
                     }
                 }
-                UaToken::Other(_) => {}
+                UaToken::Other(word) => {
+                    if specific_browser.is_none()
+                        && word
+                            .bytes()
+                            .all(|b| b.is_ascii_alphanumeric() || matches!(b, b'-' | b'_'))
+                    {
+                        if word == "Chrome-Lighthouse" || is_bot_name(word) {
+                            is_bot = true;
+                        }
+                        specific_browser = Some(Browser {
+                            name: word,
+                            version: None,
+                        });
+                    }
+                }
             }
         }
 
