@@ -9,8 +9,11 @@ Structured classification parsed lazily from a [`super::UserAgent`] string.
 */
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
 pub struct ParsedUserAgent<'a> {
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub is_mobile: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub is_webview: bool,
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub is_bot: bool,
     pub reported_os: ReportedOs,
     pub engine: Engine,
@@ -252,6 +255,7 @@ mod tests {
     #[derive(Deserialize)]
     struct TestCase {
         user_agent: String,
+        #[serde(flatten)]
         expected: serde_json::Value,
     }
 
