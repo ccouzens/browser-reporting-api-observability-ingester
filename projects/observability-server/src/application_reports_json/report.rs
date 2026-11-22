@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::{ReportBody, StrippedUrl};
+use super::{ReportBody, StrippedUrl, UserAgent};
 
 /**
 2.1.3. Reports
@@ -49,7 +49,7 @@ pub struct Report {
     - <https://www.w3.org/TR/reporting-1/#report-user-agent>
     */
     #[serde(default)]
-    user_agent: Option<String>,
+    user_agent: Option<UserAgent>,
     /**
     Each report has a body, which is either null or an object which can be
     serialized into a JSON text. The fields contained in a report’s body are
