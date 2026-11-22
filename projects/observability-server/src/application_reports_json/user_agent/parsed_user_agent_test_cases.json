@@ -100,7 +100,7 @@
 		"is_mobile": true,
 		"is_webview": true,
 		"reported_os": "ios",
-		"engine": { "name": "webkit", "version": null },
+		"engine": { "name": "webkit", "version": [18, 0] },
 		"browser": { "name": "EdgiOS", "version": [156, 0] }
 	},
 	{
@@ -225,7 +225,7 @@
 		"is_mobile": true,
 		"is_bot": true,
 		"reported_os": "ios",
-		"engine": { "name": "webkit", "version": null },
+		"engine": { "name": "webkit", "version": [17, 4] },
 		"browser": { "name": "Google-HotelAdsVerifier", "version": [2, 0] }
 	},
 	{
@@ -295,7 +295,7 @@
 		"user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15 (Applebot/0.1; +http://www.apple.com/go/applebot)",
 		"is_bot": true,
 		"reported_os": "mac_os",
-		"engine": { "name": "webkit", "version": null },
+		"engine": { "name": "webkit", "version": [17, 4] },
 		"browser": { "name": "Applebot", "version": [0, 1] }
 	},
 	{
@@ -310,7 +310,7 @@
 		"user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/601.2.4 (KHTML, like Gecko) Version/9.0.1 Safari/601.2.4 facebookexternalhit/1.1 Facebot Twitterbot/1.0",
 		"is_bot": true,
 		"reported_os": "mac_os",
-		"engine": { "name": "webkit", "version": null },
+		"engine": { "name": "webkit", "version": [9, 0] },
 		"browser": { "name": "Twitterbot", "version": [1, 0] }
 	},
 	{
@@ -375,7 +375,7 @@
 		"is_mobile": true,
 		"is_webview": true,
 		"reported_os": "ios",
-		"engine": { "name": "webkit", "version": null },
+		"engine": { "name": "webkit", "version": [26, 6] },
 		"browser": { "name": "Snapchat", "version": [14, 32] }
 	},
 	{
@@ -383,7 +383,7 @@
 		"is_mobile": true,
 		"is_webview": true,
 		"reported_os": "ios",
-		"engine": { "name": "webkit", "version": null },
+		"engine": { "name": "webkit", "version": [27, 2] },
 		"browser": { "name": "Ddg", "version": [27, 2] }
 	},
 	{
@@ -412,5 +412,20 @@
 		"reported_os": "android",
 		"engine": { "name": "blink", "major": 135 },
 		"browser": { "name": "XiaoMi/MiuiBrowser", "version": [14, 67] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 27_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2.1 Mobile/15E148 Safari/604.1 (Ecosia ios@12.7.1.3487)",
+		"is_mobile": true,
+		"is_webview": true,
+		"reported_os": "ios",
+		"engine": { "name": "webkit", "version": [27, 2] },
+		"browser": { "name": "Ecosia", "version": [12, 7] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36 (Ecosia android@154.0.0.0)",
+		"is_mobile": true,
+		"reported_os": "android",
+		"engine": { "name": "blink", "major": 154 },
+		"browser": { "name": "Ecosia", "version": [154, 0] }
 	}
 ]

@@ -126,6 +126,9 @@ impl<'a> ParsedUserAgent<'a> {
                                     });
                                 }
                             }
+                            _ if let Some(browser) = parse_comment_at_browser(segment) => {
+                                specific_browser = Some(browser);
+                            }
                             _ => {
                                 for word in segment.split_whitespace() {
                                     if let Some(os) = ReportedOs::from_token(word)
@@ -256,13 +259,7 @@ impl<'a> ParsedUserAgent<'a> {
         } else if let Some((major, _)) = firefox {
             Engine::Gecko { major }
         } else if has_apple_webkit {
-            Engine::WebKit {
-                version: if browser.is_some_and(|b| b.name == "Safari") {
-                    version
-                } else {
-                    None
-                },
-            }
+            Engine::WebKit { version }
         } else {
             Engine::Other
         };
@@ -292,6 +289,19 @@ fn parse_comment_browser(segment: &str) -> Option<Browser<'_>> {
         .split_once('/')
         .map_or((token, None), |(n, v)| (n, parse_version(v)));
     Some(Browser { name, version })
+}
+
+fn parse_comment_at_browser(segment: &str) -> Option<Browser<'_>> {
+    let (name, rest) = segment.split_once(' ')?;
+    let (tag, version_str) = rest.split_once('@')?;
+    if name.is_empty() || tag.is_empty() || version_str.contains(char::is_whitespace) {
+        return None;
+    }
+    let version = parse_version(version_str)?;
+    Some(Browser {
+        name,
+        version: Some(version),
+    })
 }
 
 fn is_bot_name(name: &str) -> bool {
