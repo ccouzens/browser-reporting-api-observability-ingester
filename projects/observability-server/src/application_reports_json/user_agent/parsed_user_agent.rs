@@ -187,6 +187,7 @@ impl<'a> ParsedUserAgent<'a> {
                         }
                     }
                     if is_facebook {
+                        saw_wv = true;
                         specific_browser = Some(Browser {
                             name: "Facebook",
                             version: fb_version,

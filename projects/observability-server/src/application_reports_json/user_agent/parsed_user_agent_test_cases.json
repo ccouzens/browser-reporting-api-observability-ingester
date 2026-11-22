@@ -520,5 +520,13 @@
 		"reported_os": "ios",
 		"engine": { "name": "webkit", "version": null },
 		"browser": { "name": "meta-externalads", "version": [1, 1] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Linux; Android 10; ONEPLUS A7010; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.6613.100 Mobile Safari/E7FBAF [FB_IAB/FB4A;FBAV/520.0.0.44.99;]",
+		"is_mobile": true,
+		"is_webview": true,
+		"reported_os": "android",
+		"engine": { "name": "blink", "major": 128 },
+		"browser": { "name": "Facebook", "version": [520, 0] }
 	}
 ]
