@@ -1,7 +1,11 @@
+mod browser;
+mod engine;
 mod parsed_user_agent;
 mod reported_os;
 mod tokenizer;
 
+pub use browser::Browser;
+pub use engine::Engine;
 pub use parsed_user_agent::ParsedUserAgent;
 pub use reported_os::ReportedOs;
 

@@ -1,5 +1,5 @@
 use super::{
-    ReportedOs,
+    Browser, Engine, ReportedOs,
     tokenizer::{Tokenizer, UaToken},
 };
 use serde::Serialize;
@@ -18,53 +18,6 @@ pub struct ParsedUserAgent<'a> {
     pub reported_os: ReportedOs,
     pub engine: Engine,
     pub browser: Option<Browser<'a>>,
-}
-
-/**
-Rendering engine and engine version parsed from a [`super::UserAgent`].
-*/
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
-#[serde(tag = "name", rename_all = "snake_case")]
-pub enum Engine {
-    Blink {
-        major: u16,
-    },
-    Gecko {
-        major: u16,
-    },
-    #[serde(rename = "webkit")]
-    WebKit {
-        version: Option<(u16, u16)>,
-    },
-    Other,
-}
-
-impl Engine {
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Self::Blink { .. } => "blink",
-            Self::Gecko { .. } => "gecko",
-            Self::WebKit { .. } => "webkit",
-            Self::Other => "other",
-        }
-    }
-
-    pub const fn version(&self) -> Option<(u16, u16)> {
-        match self {
-            Self::Blink { major } | Self::Gecko { major } => Some((*major, 0)),
-            Self::WebKit { version } => *version,
-            Self::Other => None,
-        }
-    }
-}
-
-/**
-Browser name and version parsed from a [`super::UserAgent`].
-*/
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
-pub struct Browser<'a> {
-    pub name: &'a str,
-    pub version: Option<(u16, u16)>,
 }
 
 impl<'a> ParsedUserAgent<'a> {
