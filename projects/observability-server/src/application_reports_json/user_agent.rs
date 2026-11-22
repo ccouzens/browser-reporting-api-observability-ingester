@@ -1,30 +1,27 @@
 use std::fmt;
 
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use user_agent_classifier::UserAgentClassifier;
+use user_agent_classifier::{Classification, parse};
 use yoke::{Yoke, Yokeable};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Yokeable)]
-struct YokedClassifier<'a>(UserAgentClassifier<'a>);
+struct YokedClassification<'a>(Classification<'a>);
 
 /**
 A `User-Agent` header value that preserves the original string for JSON
-serialization while eagerly parsing [`UserAgentClassifier`] upon creation,
-yoking the zero-copy [`UserAgentClassifier`] directly to its backing `String`.
 
 - <https://w3c.github.io/reporting/#report-user-agent>
 - <https://www.w3.org/TR/reporting-1/#report-user-agent>
 */
-pub struct UserAgent(Yoke<YokedClassifier<'static>, String>);
+pub struct UserAgent(Yoke<YokedClassification<'static>, String>);
 
 impl UserAgent {
     /**
-    Creates a new [`UserAgent`] and immediately parses its
-    [`UserAgentClassifier`] borrowing directly from the owned `String`.
+    Creates a new [`UserAgent`] and immediately parses its [`Classification`].
     */
     pub fn new(raw: impl Into<String>) -> Self {
         Self(Yoke::attach_to_cart(raw.into(), |s| {
-            YokedClassifier(UserAgentClassifier::parse(s))
+            YokedClassification(parse(s))
         }))
     }
 
@@ -36,9 +33,9 @@ impl UserAgent {
     }
 
     /**
-    Returns the pre-parsed [`UserAgentClassifier`] for this `User-Agent`.
+    Returns the pre-parsed [`Classification`] for this `User-Agent`.
     */
-    pub fn classifier(&self) -> &UserAgentClassifier<'_> {
+    pub fn classification(&self) -> &Classification<'_> {
         &self.0.get().0
     }
 }
@@ -55,7 +52,7 @@ impl fmt::Debug for UserAgent {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("UserAgent")
             .field("raw", &self.as_str())
-            .field("classifier", self.classifier())
+            .field("classification", self.classification())
             .finish()
     }
 }
@@ -112,8 +109,8 @@ mod tests {
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
         );
         assert_eq!(
-            *ua.classifier(),
-            UserAgentClassifier {
+            *ua.classification(),
+            Classification {
                 is_mobile: false,
                 is_webview: false,
                 is_bot: false,
