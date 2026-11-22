@@ -82,7 +82,8 @@ impl<'a> ParsedUserAgent<'a> {
         let mut specific_browser = None;
         let mut bot_browser = None;
 
-        for token in Tokenizer::new(ua) {
+        let mut tokens = Tokenizer::new(ua);
+        while let Some(token) = tokens.next() {
             match token {
                 UaToken::RoundBrackets(comment) => {
                     let mut segments = comment.split(';').map(str::trim);
@@ -164,6 +165,27 @@ impl<'a> ParsedUserAgent<'a> {
                     }
                 }
                 UaToken::Other("Mobile") => is_mobile = true,
+                UaToken::Other("compatible" | "compatible;") => {
+                    is_bot = true;
+                    match tokens.next() {
+                        Some(UaToken::NameSepNumber { name, number }) => {
+                            bot_browser = Some(Browser {
+                                name,
+                                version: parse_version(number),
+                            });
+                        }
+                        Some(UaToken::Other(next)) => {
+                            let name = next.trim_end_matches(';');
+                            if !name.is_empty() {
+                                bot_browser = Some(Browser {
+                                    name,
+                                    version: None,
+                                });
+                            }
+                        }
+                        _ => {}
+                    }
+                }
                 UaToken::Other(_) => {}
             }
         }
