@@ -123,6 +123,7 @@ impl<'a> ParsedUserAgent<'a> {
                     "Chrome" => chrome = parse_version(number),
                     "HeadlessChrome" => {
                         let parsed = parse_version(number);
+                        is_bot = true;
                         chrome = parsed;
                         specific_browser = Some(Browser {
                             name,

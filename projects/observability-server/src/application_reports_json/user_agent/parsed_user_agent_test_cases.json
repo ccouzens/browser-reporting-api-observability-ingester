@@ -15,10 +15,21 @@
 		"expected": {
 			"is_mobile": false,
 			"is_webview": false,
-			"is_bot": false,
+			"is_bot": true,
 			"reported_os": "linux",
 			"engine": { "name": "blink", "major": 158 },
 			"browser": { "name": "HeadlessChrome", "version": [158, 0] }
+		}
+	},
+	{
+		"user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0",
+		"expected": {
+			"is_mobile": false,
+			"is_webview": false,
+			"is_bot": true,
+			"reported_os": "linux",
+			"engine": { "name": "blink", "major": 136 },
+			"browser": { "name": "Edg", "version": [136, 0] }
 		}
 	},
 	{
