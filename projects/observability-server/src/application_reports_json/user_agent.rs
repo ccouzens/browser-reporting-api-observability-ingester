@@ -1,13 +1,13 @@
 mod browser;
 mod engine;
 mod parsed_user_agent;
-mod reported_os;
+mod reported_platform;
 mod tokenizer;
 
 pub use browser::Browser;
 pub use engine::Engine;
 pub use parsed_user_agent::ParsedUserAgent;
-pub use reported_os::ReportedOs;
+pub use reported_platform::ReportedPlatform;
 
 use serde::{Deserialize, Serialize};
 
@@ -31,7 +31,7 @@ impl UserAgent {
     }
 
     /**
-    Parses the `User-Agent` string into structured fields (`reported_os`,
+    Parses the `User-Agent` string into structured fields (`reported_platform`,
     `engine`, `is_mobile`, `is_webview`, `is_bot`, and `browser`).
 
     Note that `browser.name` is borrowed verbatim from the raw `User-Agent`

@@ -1,5 +1,5 @@
 use super::{
-    Browser, Engine, ReportedOs,
+    Browser, Engine, ReportedPlatform,
     tokenizer::{Tokenizer, UaToken},
 };
 use serde::Serialize;
@@ -15,14 +15,14 @@ pub struct ParsedUserAgent<'a> {
     pub is_webview: bool,
     #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub is_bot: bool,
-    pub reported_os: ReportedOs,
+    pub reported_platform: ReportedPlatform,
     pub engine: Engine,
     pub browser: Option<Browser<'a>>,
 }
 
 impl<'a> ParsedUserAgent<'a> {
     pub fn parse(ua: &'a str) -> Self {
-        let mut reported_os = ReportedOs::Other;
+        let mut reported_platform = ReportedPlatform::Other;
         let mut is_mobile = false;
         let mut is_bot = false;
         let mut saw_wv = false;
@@ -84,13 +84,13 @@ impl<'a> ParsedUserAgent<'a> {
                             }
                             _ => {
                                 for word in segment.split_whitespace() {
-                                    if let Some(os) = ReportedOs::from_token(word)
+                                    if let Some(platform) = ReportedPlatform::from_token(word)
                                         && matches!(
-                                            reported_os,
-                                            ReportedOs::Other | ReportedOs::Linux
+                                            reported_platform,
+                                            ReportedPlatform::Other | ReportedPlatform::Linux
                                         )
                                     {
-                                        reported_os = os;
+                                        reported_platform = platform;
                                     }
                                 }
                             }
@@ -221,11 +221,17 @@ impl<'a> ParsedUserAgent<'a> {
                 })
             })
             .or_else(|| {
-                (has_apple_webkit && matches!(reported_os, ReportedOs::Ios | ReportedOs::MacOs))
-                    .then_some(Browser {
-                        name: "WKWebView",
-                        version: None,
-                    })
+                (has_apple_webkit
+                    && matches!(
+                        reported_platform,
+                        ReportedPlatform::IPhone
+                            | ReportedPlatform::IPad
+                            | ReportedPlatform::Macintosh
+                    ))
+                .then_some(Browser {
+                    name: "WKWebView",
+                    version: None,
+                })
             });
 
         let engine = if let Some((major, _)) = chrome {
@@ -239,18 +245,23 @@ impl<'a> ParsedUserAgent<'a> {
         };
 
         let is_webview = !is_bot
-            && ((reported_os == ReportedOs::Android
+            && ((reported_platform == ReportedPlatform::Android
                 && (saw_wv
                     || (matches!(engine, Engine::Blink { .. }) && version == Some((4, 0)))))
                 || (matches!(engine, Engine::WebKit { .. })
-                    && matches!(reported_os, ReportedOs::Ios | ReportedOs::MacOs)
+                    && matches!(
+                        reported_platform,
+                        ReportedPlatform::IPhone
+                            | ReportedPlatform::IPad
+                            | ReportedPlatform::Macintosh
+                    )
                     && !browser.is_some_and(|b| b.name == "Safari")));
 
         Self {
             is_mobile,
             is_webview,
             is_bot,
-            reported_os,
+            reported_platform,
             engine,
             browser,
         }
@@ -332,7 +343,7 @@ mod tests {
     }
 
     #[test]
-    fn engine_and_os_helpers() {
+    fn engine_and_platform_helpers() {
         assert_eq!(Engine::Blink { major: 156 }.as_str(), "blink");
         assert_eq!(Engine::Blink { major: 156 }.version(), Some((156, 0)));
         assert_eq!(Engine::Gecko { major: 160 }.as_str(), "gecko");
@@ -352,6 +363,13 @@ mod tests {
         );
         assert_eq!(Engine::Other.as_str(), "other");
         assert_eq!(Engine::Other.version(), None);
-        assert_eq!(ReportedOs::Linux.as_str(), "linux");
+        assert_eq!(ReportedPlatform::Android.as_str(), "Android");
+        assert_eq!(ReportedPlatform::CrOS.as_str(), "CrOS");
+        assert_eq!(ReportedPlatform::Linux.as_str(), "Linux");
+        assert_eq!(ReportedPlatform::IPhone.as_str(), "iPhone");
+        assert_eq!(ReportedPlatform::IPad.as_str(), "iPad");
+        assert_eq!(ReportedPlatform::Macintosh.as_str(), "Macintosh");
+        assert_eq!(ReportedPlatform::Windows.as_str(), "Windows");
+        assert_eq!(ReportedPlatform::Other.as_str(), "Other");
     }
 }

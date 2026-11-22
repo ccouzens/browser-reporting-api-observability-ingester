@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 /**
-Bounded OS / platform classification as reported in the `User-Agent` string.
+Bounded platform classification as reported in the `User-Agent` string.
 
 Browser Implementations & Documentation:
 - Chromium (Blink):
@@ -17,8 +17,7 @@ Browser Implementations & Documentation:
   - <https://github.com/WebKit/WebKit/blob/2ea5b33be7f0ffde238363fa949ca0eb33aa3565/Source/WebCore/platform/glib/UserAgentGLib.cpp>
 */
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub enum ReportedOs {
+pub enum ReportedPlatform {
     /**
     Android (`Android`).
 
@@ -46,15 +45,27 @@ pub enum ReportedOs {
     - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/components/embedder_support/user_agent_utils.cc>
     - <https://developer.chrome.com/docs/android/identify-googlebooks>
     */
-    ChromeOs,
+    CrOS,
     /**
-    iOS or iPadOS in mobile mode (`iPhone` / `iPad`).
+    iPad in mobile mode (`iPad`).
 
-    - WebKit (`UserAgentIOS.mm`): emits `"iPhone"` or `"iPad"` via
-      `deviceNameForUserAgent()` with `"CPU iPhone OS <ver> like Mac OS X"` or
-      `"CPU OS <ver> like Mac OS X"` when not in `UserAgentType::Desktop` mode.
+    - WebKit (`UserAgentIOS.mm`): emits `"iPad"` via
+      `deviceNameForUserAgent()` with `"CPU OS <ver> like Mac OS X"` when not in
+      `UserAgentType::Desktop` mode.
     - Chromium (`GetUnifiedPlatform()`): returns
-      `"iPad; CPU iPad OS 14_0 like Mac OS X"` on tablets and
+      `"iPad; CPU iPad OS 14_0 like Mac OS X"` on tablets.
+
+    - <https://github.com/WebKit/WebKit/blob/2ea5b33be7f0ffde238363fa949ca0eb33aa3565/Source/WebCore/platform/ios/UserAgentIOS.mm>
+    - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/components/embedder_support/user_agent_utils.cc>
+    */
+    #[serde(rename = "iPad")]
+    IPad,
+    /**
+    iPhone or iPod touch (`iPhone`).
+
+    - WebKit (`UserAgentIOS.mm`): emits `"iPhone"` (or `"iPod touch"`) via
+      `deviceNameForUserAgent()` with `"CPU iPhone OS <ver> like Mac OS X"`.
+    - Chromium (`GetUnifiedPlatform()`): returns
       `"iPhone; CPU iPhone OS 14_0 like Mac OS X"` on phones.
     - Firefox (`InitUserAgentComponents()`): sets `mPlatform` to `"iPhone"` and
       `mCompatDevice` to `"CPU iPhone OS 18_0 like Mac OS X"`.
@@ -63,7 +74,8 @@ pub enum ReportedOs {
     - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/components/embedder_support/user_agent_utils.cc>
     - <https://github.com/mozilla-firefox/firefox/blob/5866b3015de8fc803012d8ab800d8c38df1ea5e8/netwerk/protocol/http/nsHttpHandler.cpp>
     */
-    Ios,
+    #[serde(rename = "iPhone")]
+    IPhone,
     /**
     Linux, or Android in "Desktop site" / DeX mode (`Linux`).
 
@@ -84,7 +96,7 @@ pub enum ReportedOs {
     */
     Linux,
     /**
-    macOS or iPadOS (`Macintosh`).
+    macOS or iPadOS in desktop mode (`Macintosh`).
 
     - WebKit (`UserAgentMac.mm` & `UserAgentIOS.mm`): returns
       `"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) ..."` on macOS and on
@@ -99,7 +111,7 @@ pub enum ReportedOs {
     - <https://chromium.googlesource.com/chromium/src/+/989bfb21678bad41c86612a54df922726246ecd7/components/embedder_support/user_agent_utils.cc>
     - <https://github.com/mozilla-firefox/firefox/blob/5866b3015de8fc803012d8ab800d8c38df1ea5e8/netwerk/protocol/http/nsHttpHandler.cpp>
     */
-    MacOs,
+    Macintosh,
     /**
     Windows, including Windows tablets and 2-in-1s (`Windows`).
 
@@ -120,26 +132,28 @@ pub enum ReportedOs {
     Other,
 }
 
-impl ReportedOs {
+impl ReportedPlatform {
     pub const fn as_str(&self) -> &'static str {
         match self {
-            Self::Android => "android",
-            Self::ChromeOs => "chrome_os",
-            Self::Ios => "ios",
-            Self::Linux => "linux",
-            Self::MacOs => "mac_os",
-            Self::Windows => "windows",
-            Self::Other => "other",
+            Self::Android => "Android",
+            Self::CrOS => "CrOS",
+            Self::IPad => "iPad",
+            Self::IPhone => "iPhone",
+            Self::Linux => "Linux",
+            Self::Macintosh => "Macintosh",
+            Self::Windows => "Windows",
+            Self::Other => "Other",
         }
     }
 
     pub(super) fn from_token(token: &str) -> Option<Self> {
         match token {
-            "iPhone" | "iPad" => Some(Self::Ios),
+            "iPhone" => Some(Self::IPhone),
+            "iPad" => Some(Self::IPad),
             "Android" => Some(Self::Android),
-            "CrOS" => Some(Self::ChromeOs),
+            "CrOS" => Some(Self::CrOS),
             "Windows" => Some(Self::Windows),
-            "Macintosh" => Some(Self::MacOs),
+            "Macintosh" => Some(Self::Macintosh),
             "Linux" => Some(Self::Linux),
             _ => None,
         }
