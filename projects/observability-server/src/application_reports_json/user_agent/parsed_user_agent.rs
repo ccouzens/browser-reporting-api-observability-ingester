@@ -11,6 +11,7 @@ Structured classification parsed lazily from a [`super::UserAgent`] string.
 pub struct ParsedUserAgent<'a> {
     pub is_mobile: bool,
     pub is_webview: bool,
+    pub is_bot: bool,
     pub reported_os: ReportedOs,
     pub engine: Engine,
     pub browser: Option<Browser<'a>>,
@@ -67,6 +68,7 @@ impl<'a> ParsedUserAgent<'a> {
     pub fn parse(ua: &'a str) -> Self {
         let mut reported_os = ReportedOs::Other;
         let mut is_mobile = false;
+        let mut is_bot = false;
         let mut saw_wv = false;
 
         let mut firefox = None;
@@ -75,14 +77,28 @@ impl<'a> ParsedUserAgent<'a> {
         let mut has_safari = false;
         let mut has_apple_webkit = false;
         let mut specific_browser = None;
+        let mut bot_browser = None;
 
         for token in Tokenizer::new(ua) {
             match token {
                 UaToken::RoundBrackets(comment) => {
-                    for segment in comment.split(';').map(str::trim) {
+                    let mut segments = comment.split(';').map(str::trim);
+                    while let Some(segment) = segments.next() {
                         match segment {
                             "Mobile" => is_mobile = true,
                             "wv" => saw_wv = true,
+                            "compatible" => {
+                                is_bot = true;
+                                if let Some(next) = segments.next()
+                                    && let Some(token) = next.split_whitespace().next()
+                                    && !token.is_empty()
+                                {
+                                    let (name, ver) = token
+                                        .split_once('/')
+                                        .map_or((token, None), |(n, v)| (n, parse_version(v)));
+                                    bot_browser = Some(Browser { name, version: ver });
+                                }
+                            }
                             _ => {
                                 for word in segment.split_whitespace() {
                                     if let Some(os) = ReportedOs::from_token(word)
@@ -148,7 +164,8 @@ impl<'a> ParsedUserAgent<'a> {
             }
         }
 
-        let browser = specific_browser
+        let browser = bot_browser
+            .or(specific_browser)
             .or_else(|| {
                 firefox.map(|v| Browser {
                     name: "Firefox",
@@ -191,14 +208,16 @@ impl<'a> ParsedUserAgent<'a> {
             Engine::Other
         };
 
-        let is_webview = (reported_os == ReportedOs::Android && saw_wv)
-            || (matches!(engine, Engine::WebKit { .. })
-                && matches!(reported_os, ReportedOs::Ios | ReportedOs::MacOs)
-                && !browser.is_some_and(|b| b.name == "Safari"));
+        let is_webview = !is_bot
+            && ((reported_os == ReportedOs::Android && saw_wv)
+                || (matches!(engine, Engine::WebKit { .. })
+                    && matches!(reported_os, ReportedOs::Ios | ReportedOs::MacOs)
+                    && !browser.is_some_and(|b| b.name == "Safari")));
 
         Self {
             is_mobile,
             is_webview,
+            is_bot,
             reported_os,
             engine,
             browser,
@@ -207,13 +226,19 @@ impl<'a> ParsedUserAgent<'a> {
 }
 
 fn parse_version(version: &str) -> Option<(u16, u16)> {
+    let version = version.strip_prefix(['v', 'V']).unwrap_or(version);
     let mut parts = version.split('.');
-    let major = parts.next()?.parse::<u16>().ok()?;
-    let minor = parts
-        .next()
-        .and_then(|s| s.parse::<u16>().ok())
-        .unwrap_or(0);
+    let major = parse_leading_u16(parts.next()?)?;
+    let minor = parts.next().and_then(parse_leading_u16).unwrap_or(0);
     Some((major, minor))
+}
+
+fn parse_leading_u16(s: &str) -> Option<u16> {
+    let digits_end = s
+        .bytes()
+        .position(|b| !b.is_ascii_digit())
+        .unwrap_or(s.len());
+    s[..digits_end].parse::<u16>().ok()
 }
 
 #[cfg(test)]

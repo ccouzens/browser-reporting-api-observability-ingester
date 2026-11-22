@@ -28,7 +28,7 @@ impl UserAgent {
 
     /**
     Parses the `User-Agent` string into structured fields (`reported_os`,
-    `engine`, `is_mobile`, `is_webview`, and `browser`).
+    `engine`, `is_mobile`, `is_webview`, `is_bot`, and `browser`).
 
     Note that `browser.name` is borrowed verbatim from the raw `User-Agent`
     string and is unbounded; do not use it directly as a high-cardinality
