@@ -213,7 +213,9 @@ impl<'a> ParsedUserAgent<'a> {
         };
 
         let is_webview = !is_bot
-            && ((reported_os == ReportedOs::Android && saw_wv)
+            && ((reported_os == ReportedOs::Android
+                && (saw_wv
+                    || (matches!(engine, Engine::Blink { .. }) && version == Some((4, 0)))))
                 || (matches!(engine, Engine::WebKit { .. })
                     && matches!(reported_os, ReportedOs::Ios | ReportedOs::MacOs)
                     && !browser.is_some_and(|b| b.name == "Safari")));
