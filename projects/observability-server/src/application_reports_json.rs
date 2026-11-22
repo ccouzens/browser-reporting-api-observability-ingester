@@ -14,7 +14,6 @@ mod report_body;
 mod reports;
 mod request_destination;
 mod stripped_url;
-mod user_agent;
 
 pub use blocked_url::BlockedUrl;
 pub use connection_allowlist_connection::ConnectionAllowlistConnection;
@@ -32,4 +31,3 @@ pub use report_body::ReportBody;
 pub use reports::Reports;
 pub use request_destination::RequestDestination;
 pub use stripped_url::StrippedUrl;
-pub use user_agent::UserAgent;

@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
+use user_agent_classifier::UserAgent;
 
-use super::{ReportBody, StrippedUrl, UserAgent};
+use super::{ReportBody, StrippedUrl};
 
 /**
 2.1.3. Reports
