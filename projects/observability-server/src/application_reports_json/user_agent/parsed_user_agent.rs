@@ -79,27 +79,40 @@ impl<'a> ParsedUserAgent<'a> {
         for token in Tokenizer::new(ua) {
             match token {
                 UaToken::RoundBrackets(comment) => {
-                    for part in comment.split(|c: char| !c.is_ascii_alphanumeric()) {
-                        match part {
+                    for segment in comment.split(';').map(str::trim) {
+                        match segment {
                             "Mobile" => is_mobile = true,
                             "wv" => saw_wv = true,
                             _ => {
-                                if let Some(os) = ReportedOs::from_token(part)
-                                    && matches!(reported_os, ReportedOs::Other | ReportedOs::Linux)
-                                {
-                                    reported_os = os;
+                                for word in segment.split_whitespace() {
+                                    if let Some(os) = ReportedOs::from_token(word)
+                                        && matches!(
+                                            reported_os,
+                                            ReportedOs::Other | ReportedOs::Linux
+                                        )
+                                    {
+                                        reported_os = os;
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                UaToken::NameSepNumber { name, number, .. } => match name {
+                UaToken::NameSepNumber { name, number } => match name {
                     "Mozilla" | "Gecko" => {}
                     "AppleWebKit" => has_apple_webkit = true,
                     "Mobile" => is_mobile = true,
                     "Version" => version = parse_version(number),
                     "Safari" => has_safari = true,
                     "Chrome" => chrome = parse_version(number),
+                    "HeadlessChrome" => {
+                        let parsed = parse_version(number);
+                        chrome = parsed;
+                        specific_browser = Some(Browser {
+                            name,
+                            version: parsed,
+                        });
+                    }
                     "Firefox" => firefox = parse_version(number),
                     _ => {
                         specific_browser = Some(Browser {
@@ -223,8 +236,8 @@ mod tests {
         assert!(!cases.is_empty());
 
         for case in cases {
-            let actual = serde_json::to_value(UserAgent::from(case.user_agent.as_str()).parse())
-                .unwrap();
+            let actual =
+                serde_json::to_value(UserAgent::from(case.user_agent.as_str()).parse()).unwrap();
             assert_json_eq!(actual, case.expected);
         }
     }

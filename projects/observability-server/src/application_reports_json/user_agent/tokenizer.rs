@@ -3,11 +3,7 @@ A single zero-allocation token produced from a `User-Agent` string.
 */
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum UaToken<'a> {
-    NameSepNumber {
-        name: &'a str,
-        sep: char,
-        number: &'a str,
-    },
+    NameSepNumber { name: &'a str, number: &'a str },
     RoundBrackets(&'a str),
     SquareBrackets(&'a str),
     Other(&'a str),
@@ -33,7 +29,7 @@ impl<'a> Iterator for Tokenizer<'a> {
         }
 
         if let Some(after_open) = self.rest.strip_prefix('(') {
-            let (content, remaining) = after_open.split_once(')').unwrap_or((after_open, ""));
+            let (content, remaining) = split_round_brackets(after_open);
             self.rest = remaining;
             return Some(UaToken::RoundBrackets(content));
         }
@@ -64,7 +60,7 @@ impl<'a> Iterator for Tokenizer<'a> {
                 && (sep == '/' || !number.contains('/'))
             {
                 self.rest = next_rest;
-                return Some(UaToken::NameSepNumber { name, sep, number });
+                return Some(UaToken::NameSepNumber { name, number });
             }
         }
 
@@ -72,6 +68,23 @@ impl<'a> Iterator for Tokenizer<'a> {
         self.rest = rest;
         Some(UaToken::Other(word))
     }
+}
+
+fn split_round_brackets(after_open: &str) -> (&str, &str) {
+    let mut depth = 1usize;
+    for (idx, b) in after_open.bytes().enumerate() {
+        match b {
+            b'(' => depth += 1,
+            b')' => {
+                depth -= 1;
+                if depth == 0 {
+                    return (&after_open[..idx], &after_open[idx + 1..]);
+                }
+            }
+            _ => {}
+        }
+    }
+    (after_open, "")
 }
 
 fn split_word(s: &str) -> (&str, &str) {
@@ -92,25 +105,21 @@ mod tests {
             vec![
                 UaToken::NameSepNumber {
                     name: "Mozilla",
-                    sep: '/',
                     number: "5.0",
                 },
                 UaToken::RoundBrackets("Linux; Android 10; K"),
                 UaToken::NameSepNumber {
                     name: "AppleWebKit",
-                    sep: '/',
                     number: "537.36",
                 },
                 UaToken::RoundBrackets("KHTML, like Gecko"),
                 UaToken::NameSepNumber {
                     name: "Chrome",
-                    sep: '/',
                     number: "157.0.0.0",
                 },
                 UaToken::Other("Mobile"),
                 UaToken::NameSepNumber {
                     name: "Safari",
-                    sep: '/',
                     number: "537.36",
                 },
             ]
@@ -126,19 +135,16 @@ mod tests {
             vec![
                 UaToken::NameSepNumber {
                     name: "Mozilla",
-                    sep: '/',
                     number: "5.0",
                 },
                 UaToken::RoundBrackets("iPhone; CPU iPhone OS 18_0 like Mac OS X"),
                 UaToken::NameSepNumber {
                     name: "AppleWebKit",
-                    sep: '/',
                     number: "605.1.15",
                 },
                 UaToken::RoundBrackets("KHTML, like Gecko"),
                 UaToken::NameSepNumber {
                     name: "Mobile",
-                    sep: '/',
                     number: "22A3354",
                 },
                 UaToken::SquareBrackets(
@@ -157,27 +163,43 @@ mod tests {
             vec![
                 UaToken::NameSepNumber {
                     name: "Mozilla",
-                    sep: '/',
                     number: "5.0",
                 },
                 UaToken::RoundBrackets("iPhone; CPU iPhone OS 18_0 like Mac OS X"),
                 UaToken::NameSepNumber {
                     name: "AppleWebKit",
-                    sep: '/',
                     number: "605.1.15",
                 },
                 UaToken::RoundBrackets("KHTML, like Gecko"),
                 UaToken::NameSepNumber {
                     name: "Mobile",
-                    sep: '/',
                     number: "15E148",
                 },
                 UaToken::NameSepNumber {
                     name: "Instagram",
-                    sep: ' ',
                     number: "360.0.0.0",
                 },
                 UaToken::RoundBrackets("iPhone16,1; iOS 18_0"),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_tokenize_nested_round_brackets() {
+        let ua = "Mozilla/5.0 (Linux; Android 11; moto g(7) power Build/QPO30.52-29; wv) AppleWebKit/537.36";
+        let tokens: Vec<_> = Tokenizer::new(ua).collect();
+        assert_eq!(
+            tokens,
+            vec![
+                UaToken::NameSepNumber {
+                    name: "Mozilla",
+                    number: "5.0",
+                },
+                UaToken::RoundBrackets("Linux; Android 11; moto g(7) power Build/QPO30.52-29; wv"),
+                UaToken::NameSepNumber {
+                    name: "AppleWebKit",
+                    number: "537.36",
+                },
             ]
         );
     }

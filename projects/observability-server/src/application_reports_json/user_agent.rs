@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 /**
 A raw `User-Agent` header value preserved verbatim for JSON serialization and
-logging, with lazy parsing into bounded observability enums.
+logging, with lazy parsing into structured fields.
 
 - <https://w3c.github.io/reporting/#report-user-agent>
 - <https://www.w3.org/TR/reporting-1/#report-user-agent>
@@ -27,8 +27,12 @@ impl UserAgent {
     }
 
     /**
-    Parses the `User-Agent` string into bounded observability fields suitable
-    for Prometheus labels and structured logs.
+    Parses the `User-Agent` string into structured fields (`reported_os`,
+    `engine`, `is_mobile`, `is_webview`, and `browser`).
+
+    Note that `browser.name` is borrowed verbatim from the raw `User-Agent`
+    string and is unbounded; do not use it directly as a high-cardinality
+    metric label without an allowlist or cap.
     */
     pub fn parse(&self) -> ParsedUserAgent<'_> {
         ParsedUserAgent::parse(&self.0)
