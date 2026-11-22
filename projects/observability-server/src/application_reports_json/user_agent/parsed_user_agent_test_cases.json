@@ -492,6 +492,7 @@
 	},
 	{
 		"user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 [SuperhumanProxy]/1.0 (email hello AT superhuman.com)",
+		"is_bot": true,
 		"reported_os": "mac_os",
 		"engine": { "name": "blink", "major": 140 },
 		"browser": { "name": "SuperhumanProxy", "version": [1, 0] }
@@ -511,5 +512,13 @@
 		"reported_os": "android",
 		"engine": { "name": "blink", "major": 157 },
 		"browser": { "name": "Facebook", "version": [539, 0] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 27_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/24B156 Safari/604.1 [FBAN/FBIOS;FBAV/587.0.0.31.71;FBBV/1110946418;FBDV/iPhone19,2;FBMD/iPhone;FBSN/iOS;FBSV/27.2.1;FBSS/3;FBID/phone;FBLC/en_US;FBOP/5;FBRV/1120367764;IABMV/1] meta-externalads/1.1",
+		"is_mobile": true,
+		"is_bot": true,
+		"reported_os": "ios",
+		"engine": { "name": "webkit", "version": null },
+		"browser": { "name": "meta-externalads", "version": [1, 1] }
 	}
 ]

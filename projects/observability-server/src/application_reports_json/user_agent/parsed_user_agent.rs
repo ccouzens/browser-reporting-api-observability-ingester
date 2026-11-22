@@ -234,7 +234,7 @@ impl<'a> ParsedUserAgent<'a> {
                             .bytes()
                             .all(|b| b.is_ascii_alphanumeric() || matches!(b, b'-' | b'_'))
                     {
-                        if word == "Chrome-Lighthouse" || is_bot_name(word) {
+                        if is_bot_name(word) {
                             is_bot = true;
                         }
                         specific_browser = Some(Browser {
@@ -325,7 +325,11 @@ fn parse_comment_at_browser(segment: &str) -> Option<Browser<'_>> {
 }
 
 fn is_bot_name(name: &str) -> bool {
-    ["bot", "Bot", "spider", "Spider", "crawler", "Crawler"]
+    name == "Chrome-Lighthouse"
+        || name.starts_with("meta-")
+        || [
+            "bot", "Bot", "spider", "Spider", "crawler", "Crawler", "proxy", "Proxy",
+        ]
         .iter()
         .any(|suffix| name.ends_with(suffix))
 }
