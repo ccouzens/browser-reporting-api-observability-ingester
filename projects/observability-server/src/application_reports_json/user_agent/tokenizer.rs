@@ -40,31 +40,29 @@ impl<'a> Iterator for Tokenizer<'a> {
             return Some(UaToken::SquareBrackets(content));
         }
 
-        let name_end = self
-            .rest
-            .find(['/', ' ', '\t', '(', '['])
-            .unwrap_or(self.rest.len());
-        let (name, after_name) = self.rest.split_at(name_end);
+        let (word, rest) = split_word(self.rest);
 
-        if !name.is_empty()
-            && let Some((sep, after_sep)) =
-                after_name.strip_prefix('/').map(|s| ('/', s)).or_else(|| {
-                    after_name
-                        .strip_prefix([' ', '\t'])
-                        .map(|s| (' ', s.trim_start()))
-                })
-            && !after_sep.starts_with(['(', '['])
-        {
-            let (number, next_rest) = split_word(after_sep);
-            if number.as_bytes().first().is_some_and(u8::is_ascii_digit)
-                && (sep == '/' || !number.contains('/'))
+        if let Some((name, number)) = word.rsplit_once('/') {
+            if !name.is_empty()
+                && !name.contains("://")
+                && number.as_bytes().first().is_some_and(u8::is_ascii_digit)
             {
-                self.rest = next_rest;
+                self.rest = rest;
                 return Some(UaToken::NameSepNumber { name, number });
+            }
+        } else {
+            let after_ws = rest.trim_start();
+            if !after_ws.starts_with(['(', '[']) {
+                let (number, next_rest) = split_word(after_ws);
+                if number.as_bytes().first().is_some_and(u8::is_ascii_digit)
+                    && !number.contains('/')
+                {
+                    self.rest = next_rest;
+                    return Some(UaToken::NameSepNumber { name: word, number });
+                }
             }
         }
 
-        let (word, rest) = split_word(self.rest);
         self.rest = rest;
         Some(UaToken::Other(word))
     }
@@ -200,6 +198,26 @@ mod tests {
                     name: "AppleWebKit",
                     number: "537.36",
                 },
+            ]
+        );
+    }
+
+    #[test]
+    fn test_tokenize_multi_slash() {
+        let ua = "Chrome/135.0.7049.79 XiaoMi/MiuiBrowser/14.67.2-gn +https://example.com/123";
+        let tokens: Vec<_> = Tokenizer::new(ua).collect();
+        assert_eq!(
+            tokens,
+            vec![
+                UaToken::NameSepNumber {
+                    name: "Chrome",
+                    number: "135.0.7049.79",
+                },
+                UaToken::NameSepNumber {
+                    name: "XiaoMi/MiuiBrowser",
+                    number: "14.67.2-gn",
+                },
+                UaToken::Other("+https://example.com/123"),
             ]
         );
     }

@@ -405,5 +405,12 @@
 		"reported_os": "windows",
 		"engine": { "name": "blink", "major": 156 },
 		"browser": { "name": "Claude", "version": [6, 28899] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Linux; Android 16; POCO C75 Build/BP2A.250605.031.A3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.7049.79 Mobile Safari/537.36 XiaoMi/MiuiBrowser/14.67.2-gn",
+		"is_mobile": true,
+		"reported_os": "android",
+		"engine": { "name": "blink", "major": 135 },
+		"browser": { "name": "XiaoMi/MiuiBrowser", "version": [14, 67] }
 	}
 ]
