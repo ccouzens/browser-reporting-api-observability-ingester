@@ -36,6 +36,19 @@ impl<'a> Iterator for Tokenizer<'a> {
 
         if let Some(after_open) = self.rest.strip_prefix('[') {
             let (content, remaining) = after_open.split_once(']').unwrap_or((after_open, ""));
+            if let Some(after_slash) = remaining.strip_prefix('/') {
+                let (number, next_rest) = split_word(after_slash);
+                if !content.is_empty()
+                    && !content.contains([';', '/', ' '])
+                    && number.as_bytes().first().is_some_and(u8::is_ascii_digit)
+                {
+                    self.rest = next_rest;
+                    return Some(UaToken::NameSepNumber {
+                        name: content,
+                        number,
+                    });
+                }
+            }
             self.rest = remaining;
             return Some(UaToken::SquareBrackets(content));
         }
@@ -218,6 +231,30 @@ mod tests {
                     number: "14.67.2-gn",
                 },
                 UaToken::Other("+https://example.com/123"),
+            ]
+        );
+    }
+
+    #[test]
+    fn test_tokenize_bracketed_name_slash_number() {
+        let ua = "Mobile/15E148 [LinkedInApp]/9.32.5794 [SuperhumanProxy]/1.0 (comment)";
+        let tokens: Vec<_> = Tokenizer::new(ua).collect();
+        assert_eq!(
+            tokens,
+            vec![
+                UaToken::NameSepNumber {
+                    name: "Mobile",
+                    number: "15E148",
+                },
+                UaToken::NameSepNumber {
+                    name: "LinkedInApp",
+                    number: "9.32.5794",
+                },
+                UaToken::NameSepNumber {
+                    name: "SuperhumanProxy",
+                    number: "1.0",
+                },
+                UaToken::RoundBrackets("comment"),
             ]
         );
     }

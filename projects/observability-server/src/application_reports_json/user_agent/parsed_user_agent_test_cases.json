@@ -467,5 +467,33 @@
 		"reported_os": "ios",
 		"engine": { "name": "webkit", "version": [16, 5] },
 		"browser": { "name": "NAVER", "version": null }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 11_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0 [FBAN/EdgeFB; FHV=HP; FHM=Spectrex360]",
+		"reported_os": "mac_os",
+		"engine": { "name": "blink", "major": 136 },
+		"browser": { "name": "Facebook", "version": null }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 27_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0.1 Mobile/15E148 Safari/604.1 [WAiOS/2.26.45]",
+		"is_mobile": true,
+		"is_webview": true,
+		"reported_os": "ios",
+		"engine": { "name": "webkit", "version": [27, 0] },
+		"browser": { "name": "WAiOS", "version": [2, 26] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_6_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 [LinkedInApp]/9.32.5794",
+		"is_mobile": true,
+		"is_webview": true,
+		"reported_os": "ios",
+		"engine": { "name": "webkit", "version": null },
+		"browser": { "name": "LinkedInApp", "version": [9, 32] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 [SuperhumanProxy]/1.0 (email hello AT superhuman.com)",
+		"reported_os": "mac_os",
+		"engine": { "name": "blink", "major": 140 },
+		"browser": { "name": "SuperhumanProxy", "version": [1, 0] }
 	}
 ]

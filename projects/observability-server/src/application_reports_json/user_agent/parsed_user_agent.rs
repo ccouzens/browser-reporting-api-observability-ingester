@@ -191,6 +191,18 @@ impl<'a> ParsedUserAgent<'a> {
                             name: "Facebook",
                             version: fb_version,
                         });
+                    } else if !content.contains(';')
+                        && let Some((name, val)) = content.split_once('/')
+                        && !name.is_empty()
+                        && let Some(ver) = parse_version(val)
+                    {
+                        if is_bot_name(name) {
+                            is_bot = true;
+                        }
+                        specific_browser = Some(Browser {
+                            name,
+                            version: Some(ver),
+                        });
                     }
                 }
                 UaToken::Other("Mobile") => is_mobile = true,
