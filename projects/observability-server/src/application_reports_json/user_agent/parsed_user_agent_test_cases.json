@@ -292,6 +292,35 @@
 		"browser": { "name": "ShapBot", "version": [0, 1] }
 	},
 	{
+		"user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15 (Applebot/0.1; +http://www.apple.com/go/applebot)",
+		"is_bot": true,
+		"reported_os": "mac_os",
+		"engine": { "name": "webkit", "version": null },
+		"browser": { "name": "Applebot", "version": [0, 1] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36 Chrome-Lighthouse",
+		"is_mobile": true,
+		"is_bot": true,
+		"reported_os": "android",
+		"engine": { "name": "blink", "major": 136 },
+		"browser": { "name": "Chrome-Lighthouse", "version": null }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/601.2.4 (KHTML, like Gecko) Version/9.0.1 Safari/601.2.4 facebookexternalhit/1.1 Facebot Twitterbot/1.0",
+		"is_bot": true,
+		"reported_os": "mac_os",
+		"engine": { "name": "webkit", "version": null },
+		"browser": { "name": "Twitterbot", "version": [1, 0] }
+	},
+	{
+		"user_agent": "Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0 (via ggpht.com GoogleImageProxy)",
+		"is_bot": true,
+		"reported_os": "windows",
+		"engine": { "name": "gecko", "major": 11 },
+		"browser": { "name": "GoogleImageProxy", "version": null }
+	},
+	{
 		"user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/158.0.0.0 Mobile Safari/537.36 [FB_IAB/FB4A;FBAV/588.0.0.42.55;IABMV/1;] FBNV/500",
 		"is_mobile": true,
 		"is_webview": true,

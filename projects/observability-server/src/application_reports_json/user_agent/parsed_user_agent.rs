@@ -87,20 +87,43 @@ impl<'a> ParsedUserAgent<'a> {
             match token {
                 UaToken::RoundBrackets(comment) => {
                     let mut segments = comment.split(';').map(str::trim);
+                    let mut first_segment = None;
                     while let Some(segment) = segments.next() {
+                        if first_segment.is_none() {
+                            first_segment = Some(segment);
+                        }
                         match segment {
                             "Mobile" => is_mobile = true,
                             "wv" => saw_wv = true,
                             "compatible" => {
                                 is_bot = true;
                                 if let Some(next) = segments.next()
-                                    && let Some(token) = next.split_whitespace().next()
-                                    && !token.is_empty()
+                                    && let Some(browser) = parse_comment_browser(next)
                                 {
-                                    let (name, ver) = token
-                                        .split_once('/')
-                                        .map_or((token, None), |(n, v)| (n, parse_version(v)));
-                                    bot_browser = Some(Browser { name, version: ver });
+                                    bot_browser = Some(browser);
+                                }
+                            }
+                            _ if segment.starts_with("+http://")
+                                || segment.starts_with("+https://") =>
+                            {
+                                is_bot = true;
+                                if bot_browser.is_none()
+                                    && let Some(first) = first_segment
+                                    && !first.starts_with("+http://")
+                                    && !first.starts_with("+https://")
+                                    && !first.starts_with("http://")
+                                    && !first.starts_with("https://")
+                                {
+                                    bot_browser = parse_comment_browser(first);
+                                }
+                            }
+                            _ if let Some(via) = segment.strip_prefix("via ") => {
+                                is_bot = true;
+                                if let Some(name) = via.split_whitespace().last() {
+                                    bot_browser = Some(Browser {
+                                        name,
+                                        version: None,
+                                    });
                                 }
                             }
                             _ => {
@@ -136,6 +159,9 @@ impl<'a> ParsedUserAgent<'a> {
                     }
                     "Firefox" => firefox = parse_version(number),
                     _ => {
+                        if is_bot_name(name) {
+                            is_bot = true;
+                        }
                         specific_browser = Some(Browser {
                             name,
                             version: parse_version(number),
@@ -165,6 +191,13 @@ impl<'a> ParsedUserAgent<'a> {
                     }
                 }
                 UaToken::Other("Mobile") => is_mobile = true,
+                UaToken::Other("Chrome-Lighthouse") => {
+                    is_bot = true;
+                    bot_browser = Some(Browser {
+                        name: "Chrome-Lighthouse",
+                        version: None,
+                    });
+                }
                 UaToken::Other("compatible" | "compatible;") => {
                     is_bot = true;
                     match tokens.next() {
@@ -251,6 +284,20 @@ impl<'a> ParsedUserAgent<'a> {
             browser,
         }
     }
+}
+
+fn parse_comment_browser(segment: &str) -> Option<Browser<'_>> {
+    let token = segment.split_whitespace().next()?;
+    let (name, version) = token
+        .split_once('/')
+        .map_or((token, None), |(n, v)| (n, parse_version(v)));
+    Some(Browser { name, version })
+}
+
+fn is_bot_name(name: &str) -> bool {
+    ["bot", "Bot", "spider", "Spider", "crawler", "Crawler"]
+        .iter()
+        .any(|suffix| name.ends_with(suffix))
 }
 
 fn parse_version(version: &str) -> Option<(u16, u16)> {
