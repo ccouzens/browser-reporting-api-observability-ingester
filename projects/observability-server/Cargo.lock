@@ -725,6 +725,7 @@ dependencies = [
  "url",
  "user-agent-classifier",
  "walkdir",
+ "yoke",
 ]
 
 [[package]]
@@ -1208,9 +1209,9 @@ dependencies = [
 
 [[package]]
 name = "user-agent-classifier"
-version = "0.1.2"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba5954e980b8551be54d27592e12dbe85ca45d0d49b009f3ab8d10f419050341"
+checksum = "4cbac65d06005a5ee803671d214913878b9b1907660d88f4b8f2d06d69a80c98"
 dependencies = [
  "serde",
 ]
